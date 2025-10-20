@@ -19,7 +19,7 @@
 .animal {
     border-radius: 6%;
     border: 1px solid black;
-    width: 10%;
+    width: 150px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
