@@ -1,3 +1,17 @@
+:root {
+    --bg_color: rgba(142,202,230);
+    --light_text_color: white;
+    --dark_text_color: rgba(2, 48, 71);
+    --dark_bg: rgba(33, 158, 188);
+    --accent1: rgba(255, 183, 3);
+    --accent2: rgba(251, 133, 0);
+}
+
+body {
+    background-color: var(--bg_color);
+}
+
+
 .row {
     display: flex;
     flex-wrap: wrap;
