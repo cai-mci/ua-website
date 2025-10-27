@@ -1,6 +1,10 @@
 <header>
     <title> Adoptable Animals </title>
     <link rel="stylesheet" href="styles.css">
+    <!-- including supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js" ></script>
+    <!-- including the js functions we made to query the db -->
+    <script src="animals.js" ></script>
 </header>
 
 <body>
@@ -40,5 +44,13 @@
             <p>Age<br>Gender</p>
         </div>
     </div>
+
+    <h1>Animals List</h1>
+    <div id="animals-container"></div> <script>
+        // wait for page to load, then run function
+        window.addEventListener('load', () => {
+        loadAnimals();
+        });
+    </script>
     
 </body>
