@@ -7,14 +7,16 @@ async function loadAnimals() {
     //initialize supabase
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
-    //query the database to get all the data from the table animals
+    //query the database to get all the data from the animals table
     const { data, error } = await supabase.from('animals').select('*');
 
     if (error) {
         console.log("Data:", data);
         console.log("Error:", error);
         return;
-    }
+    } else {
+        console.log("Data:",data);
+    } //prints out in console just for debugging purposes
 
     //access the div id = "animals-container from animals.html"
     const animals = document.getElementById('animals-container');
