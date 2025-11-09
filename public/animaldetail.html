@@ -21,7 +21,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // 1. Get the ID from the URL
             const params = new URLSearchParams(window.location.search);
-            const animalId = parseInt(params.get('id')); // Gets the number after '?id='
+            const animalId = parseInt(params.get('id')); 
 
             if (animalId) {
                 // 2. Call the function in animals.js to fetch and display details
