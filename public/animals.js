@@ -73,18 +73,84 @@ async function loadAnimals() {
 // });
 
 
+
+
 async function addAnimal(event) {
     event.preventDefault();
 
-    const name = document.getElementById('name').value;
-    const age = parseInt(document.getElementById('age').value);
+    // mandatory
+    const id = parseInt(document.getElementById('Id').value);
+    const animal = parseInt(document.getElementById('Animal').value);
+    const name = document.getElementById('Name').value;
+    const age_group = parseInt(document.getElementById('AgeGroup').value);
+    const gender = parseInt(document.getElementById('Gender').value);
+    const in_foster = parseInt(document.getElementById('InFoster').value);
+    const activity_level = parseInt(document.getElementById('ActivityLevel').value);
+    const size = parseInt(document.getElementById('Size').value);
+    
+    // testing data
+    // const id = 10;
+    // const animal = 0;
+    // const name = "Test";
+    // const age_group = 0;
+    // const gender = 0;
+    // const in_foster = 0;
+    // const activity_level = 0;
+    // const size = 0;
+
+    // TODO: parse date
+    // const intake_date = document.getElementById('age').value; 
 
     //initialize supabase
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
     //query the database to get all the data from the animals table
-    const { data, error } = await supabase.from('animals').insert([{name: name, id: age}]);
+    const { data, error } = await supabase.from('animals').insert([{
+        id: id,
+        animal: animal,
+        name: name,
+        agegroup: age_group,
+        gender: gender,
+        infoster: in_foster,
+        activitylevel: activity_level,
+        size: size,
+    }]);
 
+    
+    // add the optional data if it exists 
+    const optional_strings = ['age','description', 'goodwith', 'personality', 'health', 'breed', 'weight']
+    // const optional_strings = ['age']
+    // const optional_ints = ['hypoallergenic', 'fixed']
+
+    const newData = {
+        id: id, 
+    };
+    //for each field
+    for (i = 0; i < optional_strings.length; i++) {
+        field = optional_strings[i];
+        console.log('Field:', field);
+
+        try {
+            //get input from the form
+            const form_input = document.getElementById(field).value;
+            if (form_input) {
+                console.log('Worked');
+                //add that to newData
+                newData[field] = form_input;
+            } else {
+                console.log('Did not work');
+            }
+
+        } catch (e) {
+            // alert("catch:" + e);
+        }
+    }
+
+    console.log(newData)
+    const { _, optional_error } = await supabase
+        .from('animals')
+        .upsert(newData)
+        .select()
 
     //error handling
         //missiing a NOT NULL field
@@ -98,6 +164,11 @@ async function addAnimal(event) {
         console.log('Inserted:', data);
         alert('Animal added successfully!');
     }
+
+    if (optional_error) {
+        console.error('Optional Data Error:', optional_error);
+        alert('Optional Data Error: ' + optional_error.message);
+    } 
 }
 // --- loadAnimal function (for animaldetail.html) ---
 async function loadAnimal(id) {
