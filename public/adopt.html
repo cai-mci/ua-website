@@ -1,95 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title>Adoptable Animals</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js"></script>
     <script src="animals.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1>Adoptable Animals</h1>
-        <div class="nav">
-            <a class="button" href="index.html">Home</a>
-            <a class="button" href="adopt.html">Adopt</a>
-            <a class="button" href="index.html#about">About</a>
-            <a class="button" href="index.html#contact">Contact</a>
-            <a class="button" href="index.html#donate">Donate</a>
-            <a class="button" href="foster.html">Foster</a>
-        </div>
+      <h1>Adoptable Animals</h1>
+      <div class="nav">
+        <a class="button" href="index.html">Home</a>
+        <a class="button" href="adopt.html">Adopt</a>
+        <a class="button" href="index.html#about">About</a>
+        <a class="button" href="index.html#contact">Contact</a>
+        <a class="button" href="index.html#donate">Donate</a>
+        <a class="button" href="foster.html">Foster</a>
+      </div>
     </header>
 
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Back Button</title>
-        <script>
-            // back button function:
-            function goBack() {
-                if (history.length > 1) {
-                    history.back();
-                } else {
-                    window.location.href = "index.html"; 
-                }
-            }
-        </script>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Back Button</title>
+      <script>
+        // back button function:
+        function goBack() {
+          if (history.length > 1) {
+            history.back();
+          } else {
+            window.location.href = "index.html";
+          }
+        }
+      </script>
     </head>
 
     <div class="row filter-controls">
-        <p><b>Animal: </b></p>
-        <select id="Animal">
-            <option value="">Any</option>
-            <option value="dog">Dog</option>
-            <option value="cat">Cat</option>
-        </select>
-        
-        <p><b>Age: </b></p>
-        <select id="Age">
-            <option value="">Any</option>
-            <option value="baby">Baby</option>
-            <option value="young">Young</option>
-            <option value="adult">Adult</option>
-            <option value="elderly">Elderly</option>
-        </select>
-        
-        <p><b>Activity Level: </b></p>
-        <select id="Activity-Level"> 
-            <option value="">Any</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-        </select>
+      <p><b>Animal: </b></p>
+      <select id="Animal">
+        <option value="">Any</option>
+        <option value="dog">Dog</option>
+        <option value="cat">Cat</option>
+      </select>
+
+      <p><b>Age: </b></p>
+      <select id="Age">
+        <option value="">Any</option>
+        <option value="baby">Baby</option>
+        <option value="young">Young</option>
+        <option value="adult">Adult</option>
+        <option value="elderly">Elderly</option>
+      </select>
+
+      <p><b>Activity Level: </b></p>
+      <select id="Activity-Level">
+        <option value="">Any</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
+
+      <p><b>Gender: </b></p>
+      <select id="Activity-Level">
+        <option value="">Any</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
     </div>
 
-    <h1>Adoptable Animals List</h1> 
-    <div class="row" id="tiles">
-        </div>
- 
+    <h1>Adoptable Animals List</h1>
+    <div class="row" id="tiles"></div>
+
     <script>
-        // wait for page to load, then run function
-        window.addEventListener('load', () => {
-            loadAnimals();
-        });
+      // wait for page to load, then run function
+      window.addEventListener("load", () => {
+        loadAnimals();
+      });
     </script>
 
     <script>
-    // call both attachFilterListeners() and loadAnimals()
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof attachFilterListeners === 'function') attachFilterListeners();
-      if (typeof loadAnimals === 'function') loadAnimals();
-    });
-  </script>
-  
+      // call both attachFilterListeners() and loadAnimals()
+      document.addEventListener("DOMContentLoaded", () => {
+        if (typeof attachFilterListeners === "function")
+          attachFilterListeners();
+        if (typeof loadAnimals === "function") loadAnimals();
+      });
+    </script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof attachFilterListeners === 'function') attachFilterListeners();
-      if (typeof loadAnimals === 'function') loadAnimals();
-    });
-  </script>
-  
-
-</body>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        if (typeof attachFilterListeners === "function")
+          attachFilterListeners();
+        if (typeof loadAnimals === "function") loadAnimals();
+      });
+    </script>
+  </body>
 </html>
