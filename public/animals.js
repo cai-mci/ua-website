@@ -85,6 +85,7 @@ async function addAnimal(event) {
     const age_group = parseInt(document.getElementById('AgeGroup').value);
     const gender = parseInt(document.getElementById('Gender').value);
     const in_foster = parseInt(document.getElementById('InFoster').value);
+    const intake_date = document.getElementById('IntakeDate').value;
     const activity_level = parseInt(document.getElementById('ActivityLevel').value);
     const size = parseInt(document.getElementById('Size').value);
     
@@ -112,6 +113,7 @@ async function addAnimal(event) {
         agegroup: age_group,
         gender: gender,
         infoster: in_foster,
+        intakedate: intake_date,
         activitylevel: activity_level,
         size: size,
     }]);
