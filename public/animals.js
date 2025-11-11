@@ -2,76 +2,161 @@
 const SUPABASE_URL = "https://pijsxjlqxeqanknogalx.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpanN4amxxeGVxYW5rbm9nYWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1MTQ3MjUsImV4cCI6MjA3NzA5MDcyNX0.-UTF0fw7eBQZFlFK5H9FPy6FCiAwDBjj3oAM-lXfyEg";
 
-// --- Main function to load and display all animal tiles (for adopt.html) ---
-async function loadAnimals() {
-    // Initialize supabase
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    // Query the database to get all the data from the animals table
-    const { data, error } = await supabase.from('animals').select('*');
+    //  0/1 → Dog/Cat
+function speciesLabel(value) {
+    if (value === 0 || value === "0") return "Dog";
+    if (value === 1 || value === "1") return "Cat";
+    if (typeof value === "string" && value.trim() !== "") return value;
+    return "";
+  }
+  
+  function onImgError(e) {
+    const img = e.currentTarget;
+    img.alt = ""; 
+    img.onerror = null; 
+    img.src = "img/dog1.jpg"; 
+  }
+  
 
-    if (error) {
-        console.error("Error fetching data:", error);
-        return;
-    }
-
-    // FIX 1: Access the single container used in adopt.html
-    const tilesContainer = document.getElementById('tiles');
-    
-    if (!tilesContainer) {
-        console.error("Error: The container element with id='tiles' was not found.");
-        return; 
-    }
-    
-    // Clear the container
-    tilesContainer.innerHTML = ""; 
-
-    data.forEach(animalData => {
-        // 1. Create the main <div> element and set its class
-        const div = document.createElement('div');
-        div.className = 'animal';
-        
-        // 2. Add click listener for navigation
-        div.addEventListener('click', () => {
-            const animalId = animalData.id;
-            const detailPageURL = `animaldetail.html?id=${animalId}`;
-            window.location.href = detailPageURL;
-        });
-    
-        // 3. Set image path (Using static as fallback)
-        let imageSrc = 'rio/dog1.jpg'; // You can change this to animalData.image_url later
-    
-        // 4. Create <img> element
-        const img = document.createElement('img');
-        img.src = imageSrc;
-    
-        // 5. Create <h3> element for Name
-        const h3 = document.createElement('h3');
-        h3.textContent = animalData.name; 
-    
-        // 6. Create <p> element for Age and Gender
-        const p = document.createElement('p');
-        p.innerHTML = `${animalData.age}<br>${animalData.gender || 'N/A'}`; 
-
-
-    
-        // 7. Append the created elements to the main <div>
-        div.appendChild(img);
-        div.appendChild(h3);
-        div.appendChild(p);
-    
-        // 8. Append the fully constructed <div> to the tiles container
-        tilesContainer.appendChild(div);
+function attachFilterListeners() {
+    ["Animal", "Age", "Activity-Level"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("change", () => loadAnimals());
     });
-    
-    // FIX 2: The conflicting second data.forEach loop has been REMOVED!
-}
+  }
+  window.attachFilterListeners = attachFilterListeners;
+  
 
-// document.addEventListener('DOMContentLoaded', () => {
-//   const addAnimalForm = document.getElementById('animalForm');
-//   addAnimalForm.addEventListener('submit', addAnimal);
-// });
+function nonEmpty(v) {
+    if (v === null || v === undefined) return false;
+    if (typeof v === "string" && v.trim() === "") return false;
+    return true;
+  }
 
+  function getImageSrc(animal) {
+    if (nonEmpty(animal.image_url)) return animal.image_url;
+    if (nonEmpty(animal.image)) return animal.image;
+    return "img/default.jpg";
+  }
+  
+  function buildDetailHref(id) {
+    const base = window.location.href.replace(/[^/]*$/, ""); // drop current filename
+    const url = new URL("animaldetail.html", base);
+    url.searchParams.set("id", id);
+    return url.toString();
+  }
+  
+  // filters
+  function getFilters() {
+    const species = document.getElementById("Animal")?.value?.trim() || "";
+    const age = document.getElementById("Age")?.value?.trim() || "";
+    const activity = document.getElementById("Activity-Level")?.value?.trim() || "";
+    return { species, age, activity };
+  }
+  
+  // dropdowns to reload list
+  function attachFilterListeners() {
+    ["Animal", "Age", "Activity-Level"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("change", () => loadAnimals());
+    });
+  }
+  window.attachFilterListeners = attachFilterListeners;
+  
+  // Back button 
+  function goBack() {
+    if (history.length > 1) history.back();
+    else window.location.href = "adopt.html";
+  }
+  window.goBack = goBack;
+
+function speciesLabelFromRecord(rec) {
+    return speciesLabel(rec?.animal); // your DB field is `animal` (0=Dog, 1=Cat)
+  }
+  
+  
+// --- Main function to load and display all animal tiles (for adopt.html) --
+
+async function loadAnimals() {
+    const tiles = document.getElementById("tiles");
+    if (!tiles) return;
+    tiles.innerHTML = "<p>Loading…</p>";
+  
+    const speciesFilter = (document.getElementById("Animal")?.value || "").toLowerCase();   // "" | "dog" | "cat"
+    const ageFilter = (document.getElementById("Age")?.value || "").toLowerCase();          // "", "baby", ...
+    const activityFilter = (document.getElementById("Activity-Level")?.value || "").toLowerCase();
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const { data, error } = await supabase.from("animals").select("*").order("id", { ascending: true });
+  
+    if (error) {
+      console.error("Fetch error:", error);
+      tiles.innerHTML = `<p class="error">Could not load animals. ${error.message}</p>`;
+      return;
+    }
+  
+
+    let filtered = (data || []).filter((rec) => {
+      // species
+      if (speciesFilter) {
+        const label = speciesLabelFromRecord(rec).toLowerCase();
+        if (label !== speciesFilter) return false;
+      }
+      // age (best-effort: match substring; works for "adult", "young", "2 years", etc.)
+      if (ageFilter) {
+        const ageStr = (rec.age || "").toString().toLowerCase();
+        if (!ageStr.includes(ageFilter)) return false;
+      }
+      // activity level (substring match)
+      if (activityFilter) {
+        const act = (rec.activitylevel || "").toString().toLowerCase();
+        if (!act.includes(activityFilter)) return false;
+      }
+      return true;
+    });
+  
+    tiles.innerHTML = "";
+    if (filtered.length === 0) {
+      tiles.innerHTML = "<p>No animals match your filters right now.</p>";
+      return;
+    }
+  
+    filtered.forEach((animal) => {
+      const a = document.createElement("a");
+      a.className = "animal";
+      a.href = buildDetailHref(animal.id);
+  
+      const img = document.createElement("img");
+      img.src = (animal.image_url || animal.image || "img/default.jpg");
+      img.alt = "";            // prevent duplicate text when image 404s
+      img.onerror = onImgError;
+  
+      const h3 = document.createElement("h3");
+      h3.textContent = animal.name || "Adoptable Animal";
+  
+      const p = document.createElement("p");
+      const bits = [];
+  
+      if (nonEmpty(animal.age)) bits.push(animal.age);
+  
+
+      const sp = speciesLabelFromRecord(animal);
+      if (sp) bits.push(sp);
+ 
+      if (nonEmpty(animal.gender) && isNaN(animal.gender)) bits.push(animal.gender);
+  
+      if (nonEmpty(animal.activity_level)) bits.push(`${animal.activity_level} activity`);
+  
+      if (bits.length) p.textContent = bits.join(" · ");
+  
+      a.appendChild(img);
+      a.appendChild(h3);
+      if (bits.length) a.appendChild(p);
+  
+      tiles.appendChild(a);
+    });
+  }
+  
 
 
 
@@ -89,15 +174,7 @@ async function addAnimal(event) {
     const activity_level = parseInt(document.getElementById('ActivityLevel').value);
     const size = parseInt(document.getElementById('Size').value);
     
-    // testing data
-    // const id = 10;
-    // const animal = 0;
-    // const name = "Test";
-    // const age_group = 0;
-    // const gender = 0;
-    // const in_foster = 0;
-    // const activity_level = 0;
-    // const size = 0;
+    
 
     // TODO: parse date
     // const intake_date = document.getElementById('age').value; 
@@ -118,11 +195,7 @@ async function addAnimal(event) {
         size: size,
     }]);
 
-    
-    // add the optional data if it exists 
-    const optional_strings = ['age','description', 'goodwith', 'personality', 'health', 'breed', 'weight']
-    // const optional_strings = ['age']
-    // const optional_ints = ['hypoallergenic', 'fixed']
+
 
     const newData = {
         id: id, 
@@ -192,33 +265,37 @@ async function loadAnimal(id) {
 }
 
 // --- displayAnimalDetails function (for animaldetail.html) ---
-async function displayAnimalDetails(id) {
+function labeledRow(label, value) {
+    if (!nonEmpty(value)) return "";
+    return `<p><strong>${label}:</strong> ${value}</p>`;
+  }
+  
+  // --- displayAnimalDetails (REPLACED) ---
+  async function displayAnimalDetails(id) {
     const animal = await loadAnimal(id);
-    // NOTE: This assumes 'animal-detail-container' is present in animaldetail.html
     const container = document.getElementById('animal-detail-container');
-    
-    if (!container) return; // Prevent crash if element is missing
-    
-    // Clear any loading text
+    if (!container) return;
+  
     container.innerHTML = "";
-
+  
     if (!animal) {
-        container.innerHTML = '<h1>Animal Not Found</h1><p>Could not retrieve data for this animal.</p>';
-        return;
+      container.innerHTML = '<h1>Animal Not Found</h1><p>Could not retrieve data for this animal.</p>';
+      return;
     }
-
-    // Generate the HTML for the detailed view
-    const detailHTML = `
-        <div class="animal-detail">
-            <img src="${animal.image || 'img/default.jpg'}" alt="${animal.name}" style="max-width: 400px;">
-            <h1>${animal.name}</h1>
-            <p><strong>ID:</strong> ${animal.id}</p>
-            <p><strong>Age:</strong> ${animal.age}</p>
-            <p><strong>Gender:</strong> ${animal.gender || 'Not specified'}</p>
-            <p><strong>Description:</strong> ${animal.description || 'A lovely pet.'}</p>
-        </div>
+  
+    const name = animal.name || "Adoptable Animal";
+    const imgSrc = getImageSrc(animal);
+  
+    container.innerHTML = `
+      <div class="animal-detail">
+        <img src="${imgSrc}" alt="${name}" style="max-width: 400px; width: 100%; height: auto;">
+        <h1>${name}</h1>
+        ${labeledRow("Species", speciesLabelFromRecord(animal))}
+        ${labeledRow("Age", animal.age)}
+        ${labeledRow("Gender", animal.gender)}
+        ${labeledRow("Activity Level", animal.activitylevel)}
+        ${labeledRow("Description", animal.description)}
+      </div>
     `;
-
-    // Inject the generated HTML into the container
-    container.innerHTML = detailHTML;
-}
+  }
+  

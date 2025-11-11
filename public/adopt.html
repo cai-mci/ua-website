@@ -21,6 +21,22 @@
         </div>
     </header>
 
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Back Button</title>
+        <script>
+            // back button function:
+            function goBack() {
+                if (history.length > 1) {
+                    history.back();
+                } else {
+                    window.location.href = "index.html"; 
+                }
+            }
+        </script>
+    </head>
+
     <div class="row filter-controls">
         <p><b>Animal: </b></p>
         <select id="Animal">
@@ -57,5 +73,23 @@
             loadAnimals();
         });
     </script>
+
+    <script>
+    // call both attachFilterListeners() and loadAnimals()
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof attachFilterListeners === 'function') attachFilterListeners();
+      if (typeof loadAnimals === 'function') loadAnimals();
+    });
+  </script>
+  
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof attachFilterListeners === 'function') attachFilterListeners();
+      if (typeof loadAnimals === 'function') loadAnimals();
+    });
+  </script>
+  
+
 </body>
 </html>
