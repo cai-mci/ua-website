@@ -23,14 +23,15 @@
     <form onsubmit="addAnimal(event)" id = "animalForm">
         <p class = "form_header">Mandatory Fields</p>
         <label for="Id">Id:</label><br>
-        <input type="text" id="Id" name="id" placeholder="ID num:">
+        <input type="text" id="Id" name="id" placeholder="ID num:" required>
         <br>
         <label for="Name">Name:</label><br>
-        <input type="text" id="Name" name="name" placeholder="Pet's Name">
+        <input type="text" id="Name" name="name" placeholder="Pet's Name" required>
         <br>
         <label for="Age">Age Group:</label><br>
  
-        <select id="AgeGroup">
+        <select id="AgeGroup" required>
+            <option value = "" disabled selected>Select age group</option>
             <option value="0">Baby</option>
             <option value="1">Young</option>
             <option value="2">Adult</option>
@@ -39,36 +40,42 @@
         <br>
 
         <label for="Gender">Gender:</label><br>
-        <select id="Gender">
+        <select id="Gender" required>
+            <option value = "" disabled selected>Select gender</option>
             <option value="0">Male</option>
             <option value="1">Female</option>
         </select>
         <br>
 
         <label for="ActivityLevel">Activity Level:</label><br>
-        <select id="ActivityLevel">
+        <select id="ActivityLevel" required>
+            <option value = "" disabled selected>Select activity level</option>
             <option value="0">Low</option>
             <option value="1">Medium</option>
             <option value="2">High</option>
         </select>
         <br>
         <label for="Animal">Type:</label><br>
-        <select id="Animal">
+        <select id="Animal" required>
+            <option value = "" disabled selected>Select animal type</option>
             <option value="0">Dog</option>
             <option value="1">Cat</option>
             <option value="2">Other</option>
         </select>
         <br>
         <label for="InFoster">Foster:</label><br>
-        <select id="InFoster">
+        <select id="InFoster" required>
+            <option value = "" disabled selected>Select foster status</option>
             <option value="1">In Foster</option>
             <option value="0">Not in Foster</option>
         </select>
         <br>
-
+        <label for="IntakeDate">Intake Date:</label><br>
+        <input type="date" id="IntakeDate" name="IntakeDate">
         <br>
         <label for="Size">Size:</label><br>
-        <select id="Size">
+        <select id="Size" required>
+            <option value = "" disabled selected>Select size</option>
             <option value="0">Small</option>
             <option value="1">Medium</option>
             <option value="2">Large</option>

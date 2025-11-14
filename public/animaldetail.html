@@ -1,36 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title>Animal Detail</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js"></script>
-    <script src="animals.js"></script>
-</head>
-<body>
+    <script defer src="animals.js"></script>
+  </head>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const el = document.getElementById('animal-detail-container');
+      const params = new URLSearchParams(window.location.search);
+      const id = Number(params.get('id'));
+      if (Number.isFinite(id) && id > 0) {
+        displayAnimalDetails(id);
+      } else {
+        el.innerHTML = '<h1>Animal Not Found</h1><p>No animal ID was provided in the URL.</p>';
+      }
+    });
+  </script>
+  
+  <body>
     <header>
-        <h1>Animal Detail</h1>
+      <h1>Animal Detail</h1>
+      <div class="nav">
+        <button class="button" onclick="goBack()">← Back</button>
+        <a class="button" href="adopt.html">Back to Adopt</a>
+      </div>
     </header>
 
     <div id="animal-detail-container">
-        <p>Loading animal details...</p>
+      <p>Loading animal details...</p>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // 1. Get the ID from the URL
-            const params = new URLSearchParams(window.location.search);
-            const animalId = parseInt(params.get('id')); 
-
-            if (animalId) {
-                // 2. Call the function in animals.js to fetch and display details
-                displayAnimalDetails(animalId);
-            } else {
-                document.getElementById('animal-detail-container').innerHTML =
-                    '<h1>Animal Not Found</h1><p>No animal ID was provided in the URL.</p>';
-            }
-        });
+      document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const animalId = Number(params.get("id"));
+        if (Number.isFinite(animalId) && animalId > 0) {
+          displayAnimalDetails(animalId);
+        } else {
+          document.getElementById("animal-detail-container").innerHTML =
+            "<h1>Animal Not Found</h1><p>No animal ID was provided in the URL.</p>";
+        }
+      });
     </script>
-</body>
+  </body>
 </html>

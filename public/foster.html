@@ -11,6 +11,23 @@
         <a class = "button" href = "index.html#donate">Donate</a>
         <a class = "button" href="index.html">Foster</a>
     </div>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Back Button</title>
+        <script>
+            // back button function:
+            function goBack() {
+                if (history.length > 1) {
+                    history.back();
+                } else {
+                    window.location.href = "index.html"; 
+                }
+            }
+        </script>
+    </head>
+    
     <!-- info for fosters -->
     <title>Foster a Pet</title>
     <h1>Interested in fostering?</h1>
