@@ -1,10 +1,62 @@
-    <form action="/admin/login" method="post" enctype="multipart/form-data">
+    <a href = "/">Home</a>
+    
+    <form action="/admin/login" id = "logInForm" method="post">
         <br>
         <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username" placeholder="Username">
+        <input type="text" id="username" name="username" placeholder="Username" required>
         <br>
         <label for="password">Password:</label><br>
-        <input type="text" id="password" name="password" placeholder="Password">
+        <input type="text" id="password" name="password" placeholder="Password" required>
         <br>
         <input type="submit" value="Log In" name="submit">
     </form>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            //making sure that we don't try to getelementbyid until after the user clicks submit
+            const form = document.getElementById('logInForm');
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+
+                //pass the username & pass to the server as res
+                const res =  await fetch('/admin/login', {
+                    method: 'Post',
+                    headers: {'Content-Type' : 'application/json'},
+                    body: JSON.stringify({ username, password })
+                });
+
+    
+
+                // //turn the response into data -> send to console for debugging
+                // const data = res.json();
+                // console.log(data);
+                if (res.status === 200) {
+                    // login success → redirect to admin page
+                    window.location.href = '/admin.html';
+                } else if (res.status === 401) {
+                    alert('Wrong password');
+                } else if (res.status === 404) {
+                    alert('User not found');
+                } else if (res.status === 500) {
+                    alert('Database Error');
+                } else if (res.status === 501) {
+                    alert('Comparison error');
+                } else {
+                    alert('Server error');
+                }
+                    
+            });
+        
+        } catch (err) {
+            console.log('didntwork')
+            console.error(err);
+            alert('Request failed');
+        }
+
+
+    });           
+
+    </script>

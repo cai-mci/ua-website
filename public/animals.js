@@ -1,118 +1,127 @@
-const SUPABASE_URL = "https://pijsxjlqxeqanknogalx.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpanN4amxxeGVxYW5rbm9nYWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1MTQ3MjUsImV4cCI6MjA3NzA5MDcyNX0.-UTF0fw7eBQZFlFK5H9FPy6FCiAwDBjj3oAM-lXfyEg";
+import dotenv from 'dotenv';
+dotenv.config();
 
-function speciesLabel(value) {
-  if (value === 0 || value === "0") return "Dog";
-  if (value === 1 || value === "1") return "Cat";
-  if (typeof value === "string" && value.trim() !== "") return value;
-  return "";
-}
+//importing from .env
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
-function genderLabel(value) {
-  if (value === 0 || value === "0") return "Male";
-  if (value === 1 || value === "1") return "Female";
-  return "";
-}
 
-function genderLabelFromRecord(rec) {
-  const g = rec?.gender;
-  if (g === 0 || g === "0") return "male";
-  if (g === 1 || g === "1") return "female";
-  if (typeof g === "string" && g.trim()) return g.toLowerCase();
-  return "";
-}
 
-function speciesLabelFromRecord(rec) {
-  return rec?.animal === 0 || rec?.animal === "0"
-    ? "dog"
-    : rec?.animal === 1 || rec?.animal === "1"
-    ? "cat"
-    : typeof rec?.animal === "string"
-    ? rec.animal.toLowerCase()
-    : "";
-}
 
-function ageLabelFromRecord(rec) {
-  if (typeof rec?.age === "string" && rec.age.trim()) return rec.age.toLowerCase();
-  const m = { "0": "baby", "1": "young", "2": "adult", "3": "elderly" };
-  const k = rec?.agegroup != null ? String(rec.agegroup) : "";
-  return m[k] || "";
-}
 
-function activityLabelFromRecord(rec) {
-  const m = { "0": "low", "1": "medium", "2": "high" };
-  const k = rec?.activitylevel != null ? String(rec.activitylevel) : "";
-  return m[k] || (typeof rec?.activity_level === "string" ? rec.activity_level.toLowerCase() : "");
-}
 
-function passesFilters(rec, ui) {
-  if (ui.species  && speciesLabelFromRecord(rec)      !== ui.species)   return false;
-  if (ui.age      && ageLabelFromRecord(rec)          !== ui.age)       return false;
-  if (ui.activity && activityLabelFromRecord(rec)     !== ui.activity)  return false;
-  if (ui.gender   && genderLabelFromRecord(rec)       !== ui.gender)    return false;
-  return true;
-}
+// function speciesLabel(value) {
+//   if (value === 0 || value === "0") return "Dog";
+//   if (value === 1 || value === "1") return "Cat";
+//   if (typeof value === "string" && value.trim() !== "") return value;
+//   return "";
+// }
 
-function onImgError(e) {
-  const img = e.currentTarget;
-  img.alt = "";
-  img.onerror = null;
-  img.src = "img/dog1.jpg";
-}
+// function genderLabel(value) {
+//   if (value === 0 || value === "0") return "Male";
+//   if (value === 1 || value === "1") return "Female";
+//   return "";
+// }
 
-function nonEmpty(v) {
-  if (v === null || v === undefined) return false;
-  if (typeof v === "string" && v.trim() === "") return false;
-  return true;
-}
+// function genderLabelFromRecord(rec) {
+//   const g = rec?.gender;
+//   if (g === 0 || g === "0") return "male";
+//   if (g === 1 || g === "1") return "female";
+//   if (typeof g === "string" && g.trim()) return g.toLowerCase();
+//   return "";
+// }
 
-function getImageSrc(animal) {
-  if (nonEmpty(animal.image_url)) return animal.image_url;
-  if (nonEmpty(animal.image)) return animal.image;
-  return "img/default.jpg";
-}
+// function speciesLabelFromRecord(rec) {
+//   return rec?.animal === 0 || rec?.animal === "0"
+//     ? "dog"
+//     : rec?.animal === 1 || rec?.animal === "1"
+//     ? "cat"
+//     : typeof rec?.animal === "string"
+//     ? rec.animal.toLowerCase()
+//     : "";
+// }
 
-function buildDetailHref(id) {
-    return "animaldetail.html?id=" + encodeURIComponent(String(id));
-}  
+// function ageLabelFromRecord(rec) {
+//   if (typeof rec?.age === "string" && rec.age.trim()) return rec.age.toLowerCase();
+//   const m = { "0": "baby", "1": "young", "2": "adult", "3": "elderly" };
+//   const k = rec?.agegroup != null ? String(rec.agegroup) : "";
+//   return m[k] || "";
+// }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('animal-detail-container');
-    if (!container) return;
-    const params = new URLSearchParams(window.location.search);
-    const id = Number(params.get('id'));
-    if (Number.isFinite(id) && id > 0) {
-      displayAnimalDetails(id);
-    } else {
-      container.innerHTML = '<h1>Animal Not Found</h1><p>No animal ID was provided in the URL.</p>';
-    }
-  });
-  window.displayAnimalDetails = displayAnimalDetails;
-  window.loadAnimals = loadAnimals;
+// function activityLabelFromRecord(rec) {
+//   const m = { "0": "low", "1": "medium", "2": "high" };
+//   const k = rec?.activitylevel != null ? String(rec.activitylevel) : "";
+//   return m[k] || (typeof rec?.activity_level === "string" ? rec.activity_level.toLowerCase() : "");
+// }
+
+// function passesFilters(rec, ui) {
+//   if (ui.species  && speciesLabelFromRecord(rec)      !== ui.species)   return false;
+//   if (ui.age      && ageLabelFromRecord(rec)          !== ui.age)       return false;
+//   if (ui.activity && activityLabelFromRecord(rec)     !== ui.activity)  return false;
+//   if (ui.gender   && genderLabelFromRecord(rec)       !== ui.gender)    return false;
+//   return true;
+// }
+
+// function onImgError(e) {
+//   const img = e.currentTarget;
+//   img.alt = "";
+//   img.onerror = null;
+//   img.src = "img/dog1.jpg";
+// }
+
+// function nonEmpty(v) {
+//   if (v === null || v === undefined) return false;
+//   if (typeof v === "string" && v.trim() === "") return false;
+//   return true;
+// }
+
+// function getImageSrc(animal) {
+//   if (nonEmpty(animal.image_url)) return animal.image_url;
+//   if (nonEmpty(animal.image)) return animal.image;
+//   return "img/default.jpg";
+// }
+
+// function buildDetailHref(id) {
+//     return "animaldetail.html?id=" + encodeURIComponent(String(id));
+// }  
+
+// document.addEventListener('DOMContentLoaded', () => {
+//     const container = document.getElementById('animal-detail-container');
+//     if (!container) return;
+//     const params = new URLSearchParams(window.location.search);
+//     const id = Number(params.get('id'));
+//     if (Number.isFinite(id) && id > 0) {
+//       displayAnimalDetails(id);
+//     } else {
+//       container.innerHTML = '<h1>Animal Not Found</h1><p>No animal ID was provided in the URL.</p>';
+//     }
+//   });
+//   window.displayAnimalDetails = displayAnimalDetails;
+//   window.loadAnimals = loadAnimals;
   
   
 
-function getFilters() {
-  const species  = (document.getElementById("Animal")?.value || "").toLowerCase();
-  const age      = (document.getElementById("Age")?.value || "").toLowerCase();
-  const activity = (document.getElementById("Activity-Level")?.value || "").toLowerCase();
-  const gender   = (document.getElementById("Gender")?.value || "").toLowerCase();
-  return { species, age, activity, gender };
-}
+// function getFilters() {
+//   const species  = (document.getElementById("Animal")?.value || "").toLowerCase();
+//   const age      = (document.getElementById("Age")?.value || "").toLowerCase();
+//   const activity = (document.getElementById("Activity-Level")?.value || "").toLowerCase();
+//   const gender   = (document.getElementById("Gender")?.value || "").toLowerCase();
+//   return { species, age, activity, gender };
+// }
 
-function attachFilterListeners() {
-  ["Animal", "Age", "Activity-Level", "Gender"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener("change", () => loadAnimals());
-  });
-}
-window.attachFilterListeners = attachFilterListeners;
+// function attachFilterListeners() {
+//   ["Animal", "Age", "Activity-Level", "Gender"].forEach((id) => {
+//     const el = document.getElementById(id);
+//     if (el) el.addEventListener("change", () => loadAnimals());
+//   });
+// }
+// window.attachFilterListeners = attachFilterListeners;
 
-function goBack() {
-  if (history.length > 1) history.back();
-  else window.location.href = "adopt.html";
-}
-window.goBack = goBack;
+// function goBack() {
+//   if (history.length > 1) history.back();
+//   else window.location.href = "adopt.html";
+// }
+// window.goBack = goBack;
 
 async function loadAnimals() {
   const tiles = document.getElementById("tiles");

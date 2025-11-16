@@ -5,11 +5,17 @@ const app = express();
 const path = require('path'); //lets us use dirname
 app.use(express.static(path.join(__dirname, 'public'))); //allows access to everything in public
 
-const animals = require('./public/animals');
+// const animals = require('./public/animals');
 app.use(express.static('public'));
 const bcrypt = require('bcrypt');
 
 app.use(express.json()) //allows to use json
+
+const { createClient } = require('@supabase/supabase-js');
+const SUPABASE_URL = "https://pijsxjlqxeqanknogalx.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpanN4amxxeGVxYW5rbm9nYWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1MTQ3MjUsImV4cCI6MjA3NzA5MDcyNX0.-UTF0fw7eBQZFlFK5H9FPy6FCiAwDBjj3oAM-lXfyEg";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 
 // Start the server
 const port = 3000;
@@ -22,56 +28,72 @@ app.post('/', (req, res) => {
 });
 
 
-app.post('/admin/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-})
-
-const users = ["hi"]
-
+// app.post('/admin/login', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+  
+// })
 
 
-app.post('/users', async (req, res)=> {
-    try {
-        //get salt -> means same passwords hash differently
-        const salt = await bcrypt.genSalt()
-        //use that salt to create hashed password
-        const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
-        //create user
-        const user = { name: req.body.name, password: hashedPassword }
+app.post('/admin/login', async (req, res) =>{
+    const username = req.body.username;
+    const password = req.body.password;
 
-        //saving it to db
-        users.push(user)
-        //st resposne status to 201 and send a blank response to user
-        res.status(201).send()
-    } catch {
-        res.status(500).send('Could not add new user')
-    }
+    console.log("Username:", username);
+    console.log("Password:", password);
 
-})
 
-app.post('/users/login', async (req, res) =>{
-    const user = users.find(user => user.name == req.body.name)
+    const { data, error } = await supabase
+        .from("admin")
+        .select('*')
+        .eq('username', username)
+        .single(); //find user in db
+    
+
+    if (error) { return res.status(500).send('Database error'); } 
+
     //can't find user
-    console.log(user.name)
-    if (user == null) {
-        return res.sendStatus(400).send('Cannot find user')
-    }
+    if (!data) { return res.sendStatus(404); }
+
     //can find user
     try {
         //will hash inital password (with salt gotten from req.body password)
         //returns true if same
-        if (await bcrypt.compare(req.body.password, user.password)) {
-            res.send('Sucess')
+        // if (await bcrypt.compare(password, data.password)) {
+        if (password == data.password) {
+            console.log('console - Success')
+            res.status(200).send('Success'); 
         } else {
-            res.send('Wrong Password')
+            res.status(401).send('Wrong Password')
         }
         
+        
     } catch {
-        res.status(500).send('Failed comparing passwords')
+        console.log('Failed comparing')
+        res.status(501).send('Failed comparing passwords')
     }
 })
 
-app.get('/users', (req, res) => {
-    res.json(users)
-}) //gets all users
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+app.get('/adopt', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'adopt.html'));
+});
+
+//individual animal (want this to be the id??)
+app.get('/adopt/detail', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'animaldetail.html'));
+});
+
+app.get('/foster', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'foster.html'));
+});
+
+
+
+
+
+
