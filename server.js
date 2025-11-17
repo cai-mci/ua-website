@@ -68,7 +68,7 @@ app.post('/admin/login', async (req, res) =>{
         console.log('Failed comparing')
         res.status(501).send('Failed comparing passwords')
     }
-})
+});
 
 
 app.get('/adopt', (req, res) => {
