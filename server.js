@@ -90,7 +90,17 @@ app.get('/admin', (req, res) => {
 });
 
 
+app.get('/admin/add', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'addanimal.html'));
+});
 
+app.get('/admin/remove', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'removeanimal.html'));
+});
+
+app.get('/admin/edit', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'editanimal.html'));
+});
 
 
 
