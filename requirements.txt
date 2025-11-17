@@ -5,3 +5,5 @@ npm install bcrypt
 npm install express
 
 npm install dotenv
+
+npm install multer
