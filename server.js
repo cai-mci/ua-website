@@ -30,12 +30,6 @@ app.post('/', (req, res) => {
 });
 
 
-// app.post('/admin/login', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-  
-// })
-
-
 
 app.post('/admin/login', async (req, res) =>{
     const username = req.body.username;
@@ -77,10 +71,6 @@ app.post('/admin/login', async (req, res) =>{
 })
 
 
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
-
 app.get('/adopt', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'adopt.html'));
 });
@@ -94,6 +84,10 @@ app.get('/foster', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'foster.html'));
 });
 
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
 
 
 
