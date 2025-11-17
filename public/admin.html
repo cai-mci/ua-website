@@ -20,17 +20,17 @@
     </div>
     
     <!-- add a new pet -->
-    <form onsubmit="addAnimal(event)" id = "animalForm">
+    <form id = "animalForm">
         <p class = "form_header">Mandatory Fields</p>
         <label for="Id">Id:</label><br>
-        <input type="text" id="Id" name="id" placeholder="ID num:" required>
+        <input type="text" id="id" name="id" placeholder="ID num:" required>
         <br>
         <label for="Name">Name:</label><br>
-        <input type="text" id="Name" name="name" placeholder="Pet's Name" required>
+        <input type="text" id="name" name="name" placeholder="Pet's Name" required>
         <br>
         <label for="Age">Age Group:</label><br>
  
-        <select id="AgeGroup" required>
+        <select id="agegroup" required>
             <option value = "" disabled selected>Select age group</option>
             <option value="0">Baby</option>
             <option value="1">Young</option>
@@ -40,7 +40,7 @@
         <br>
 
         <label for="Gender">Gender:</label><br>
-        <select id="Gender" required>
+        <select id="gender" required>
             <option value = "" disabled selected>Select gender</option>
             <option value="0">Male</option>
             <option value="1">Female</option>
@@ -48,7 +48,7 @@
         <br>
 
         <label for="ActivityLevel">Activity Level:</label><br>
-        <select id="ActivityLevel" required>
+        <select id="activitylevel" required>
             <option value = "" disabled selected>Select activity level</option>
             <option value="0">Low</option>
             <option value="1">Medium</option>
@@ -56,7 +56,7 @@
         </select>
         <br>
         <label for="Animal">Type:</label><br>
-        <select id="Animal" required>
+        <select id="animal" required>
             <option value = "" disabled selected>Select animal type</option>
             <option value="0">Dog</option>
             <option value="1">Cat</option>
@@ -64,17 +64,17 @@
         </select>
         <br>
         <label for="InFoster">Foster:</label><br>
-        <select id="InFoster" required>
+        <select id="infoster" required>
             <option value = "" disabled selected>Select foster status</option>
             <option value="1">In Foster</option>
             <option value="0">Not in Foster</option>
         </select>
         <br>
         <label for="IntakeDate">Intake Date:</label><br>
-        <input type="date" id="IntakeDate" name="IntakeDate">
+        <input type="date" id="intakedate" name="IntakeDate">
         <br>
         <label for="Size">Size:</label><br>
-        <select id="Size" required>
+        <select id="size" required>
             <option value = "" disabled selected>Select size</option>
             <option value="0">Small</option>
             <option value="1">Medium</option>
@@ -134,3 +134,59 @@
      
     <!-- remove a pet -->
 </body>
+
+
+<script>
+        //make sure to load before getting data
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            //making sure that we don't try to getelementbyid until after the user clicks submit
+            const form = document.getElementById('animalForm');
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                // fields
+                const fields = ["id", "animal", "name", "agegroup", "gender", "infoster", "intakedate", "activitylevel", "size", "age", "description", "goodwith", "personality", "health", "breed", "weight"];
+  
+                newData = {}
+                for (let i = 0; i < fields.length; i++) {
+                    const field = fields[i];
+                    try {
+                    const form_input = document.getElementById(field).value;
+                    if (form_input) newData[field] = form_input;
+                    } catch (e) {}
+                }
+
+                console.log(newData)
+                //pass the data to the server as res
+                const res =  await fetch('/admin/insert', {
+                    method: 'Post',
+                    headers: {'Content-Type' : 'application/json'},
+                    body: JSON.stringify(newData)
+                });
+                alert('fetch');
+                const data = await res.json(); // parse JSON response
+
+                console.log("HTTP status:", res.status);
+                console.log("Server response body:", data);
+
+                if (res.status === 200) {
+                    alert('Animal added!');
+                    // form.reset();
+                } else {
+                    alert('Error Inserting');
+                }
+                 
+            });
+        
+        } catch (err) {
+            console.log('didntwork')
+            console.error(err);
+            // alert('Request failed');
+        }
+
+
+    });           
+
+</script>
+
+  
