@@ -280,7 +280,7 @@ async function loadAnimals() {
 
 
 //inserting an animal
-app.post('/admin/insert', async (req, res) => {
+app.post('/admin/addanimal', async (req, res) => {
   try {
     const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
     console.log(req.body)

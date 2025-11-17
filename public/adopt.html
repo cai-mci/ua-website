@@ -73,21 +73,6 @@
     <h1>Adoptable Animals List</h1>
     <div class="row" id="tiles"></div>
 
-    <script>
-      // wait for page to load, then run function
-      window.addEventListener("load", () => {
-        loadAnimals();
-      });
-    </script>
-
-    <script>
-      // call both attachFilterListeners() and loadAnimals()
-      document.addEventListener("DOMContentLoaded", () => {
-        if (typeof attachFilterListeners === "function")
-          attachFilterListeners();
-        if (typeof loadAnimals === "function") loadAnimals();
-      });
-    </script>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
