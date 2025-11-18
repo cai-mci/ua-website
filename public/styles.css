@@ -1,15 +1,24 @@
+/* used in all */
+
 :root {
-    --bg_color: rgba(142,202,230);
+    --bg_color: rgb(255, 255, 255);
     --light_text_color: white;
     --dark_text_color: rgba(2, 48, 71);
-    --dark_bg: rgba(33, 158, 188);
-    --accent1: rgba(255, 183, 3);
-    --accent2: rgba(251, 133, 0);
+    --dark: rgb(50, 50, 50);
+    --lightgrey: rgb(243,244,246);
+    --accent1: rgb(171, 171, 171);
+    --hover: rgb(148, 144, 144);
 }
 
-body {
-    background-color: var(--bg_color);
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background);
+    font-family: Arial, sans-serif;
 }
+ .navspacer {
+    height: 80px
+ }
 
 
 .row {
@@ -30,6 +39,273 @@ body {
     margin: 1%;
 }
 
+
+.button, .back-btn, .contact button {
+    text-decoration: none;
+    background-color: var(--accent1);
+
+    border-radius: 6px;
+    border: 2px solid var(--hover);
+    
+    padding: 7;
+    color: var(--bg_color);
+}
+
+.button:hover, .back-btn:hover, .contact button:hover  {
+    background-color: var(--hover);
+}
+h1 {
+    justify-self: center;
+}
+
+/* nav bar */
+
+.nav {
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: space-between; /* push links to the right */
+
+    position: fixed;
+
+    height: 70px;
+    width: 100%;
+    z-index: 100;
+
+    background-color: var(--accent1);
+    color: var(--bg_color);
+
+}
+
+.nav-links {
+    width: 400px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 10px;
+}
+
+.nav-links a {
+    margin: 0 auto;
+    text-decoration: none;
+    color: var(--dark);
+    width: 50px;
+}
+
+.nav h1 {
+    font: 'Franklin Gothic Medium';
+    position: static;
+    margin-left: 20px;
+    margin-right: 90px;
+    color: var(--background);
+}
+
+
+
+.wrap-left {
+    float: left;
+    margin: 0 15px 15px 0;
+    width: 200px;
+}
+
+.wrap-right {
+    float: right;
+    margin: 0 0 15px 15px;
+    width: 200px;
+}
+
+
+/* home */
+.section {
+    padding: 80px 0;
+    min-height: 80vh;
+    height: fit-content;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* home - hero */
+
+
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh; 
+    text-align: center;
+    padding: 0 20px;
+
+    background-image: url('img/sky.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    color: var(--dark_text_color); 
+    position: relative;
+}
+
+/* overlay  */
+.hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.4);
+    z-index: 0;
+    opacity: 80%;
+}
+ /* place above overlay */
+.hero-section h1, .hero-section h2, .hero-section .button {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.hero-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+.hero-section .row {
+    width: 100%;
+    display: flex;
+    justify-content: center; 
+    gap:20px;
+}
+
+/* home - contact */
+
+.contact {
+    flex: 1; 
+}
+
+.faq {
+  flex: 1;          
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 60vh;
+
+}
+
+.contact form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact input,
+.contact textarea {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+
+.contact textarea {
+    resize: vertical; /* only let message size be changed vertically */
+}
+
+
+.contact button {
+    margin: 5px 0;
+}
+
+/* admin */
+
+.back-btn {
+    /* absolute top left */
+    position: absolute; 
+    top: 12px;
+    left: 12px;
+}
+
+
+.admin-page{
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    background: var(--lightgrey);
+    font-family: Arial, sans-serif;
+}
+
+.login-box, .admin-option, .contact {
+    width: 320px;
+    padding: 30px;
+    background: var(--bg_color);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    color: var(--dark);
+    text-decoration: none;
+}
+
+.back-btn img {
+    width: 10px;
+}
+
+.admin-option img {
+    width: 40px;
+}
+
+.admin-option {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    height: 150px;
+
+    align-items: center; /* veertical */
+    justify-content: center; /* horizontal */
+
+    gap: 20px;
+}
+
+.admin-option:hover {
+    background-color: var(--accent1);
+}
+
+.login-box h2, .admin-option a {
+    margin: 0 0 20px;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333;
+    text-decoration: none;
+}
+
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 16px;
+    border: 1px solid var(--accent1);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+/* when you're typing in that box */
+.login-box input:focus {
+    border-color: var(--dark_text_color)
+}
+
+
+/* adopt page */
+
 .animal {
     border-radius: 6%;
     border: 1px solid black;
@@ -47,3 +323,45 @@ body {
     width: 100px;
     border-radius: 3%;
 }
+
+
+.filter-controls {
+    display: flex;
+    flex-wrap: wrap;          
+    gap: 20px;    
+
+    padding: 20px 30px;
+    margin: 20px 0;
+}
+
+.filter-controls label {
+    /* make labels above their filter */
+    display: flex;
+    flex-direction: column;
+
+    color: #333;
+    min-width: 130px; 
+    width: 20%;
+}
+
+.filter-controls select {
+    margin-top: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--accent1);
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background-color: var(--bg_color);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-controls select:hover {
+    border-color: var(--hover); /* blue border on hover */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.filter-controls select:focus {
+    border-color: var(--hover);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+

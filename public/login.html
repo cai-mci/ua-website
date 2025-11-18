@@ -1,15 +1,26 @@
-    <a href = "/">Home</a>
+<header>
+    <title> Admin </title>
+    <link rel="icon" type = "image/x-icon" href= img\logo.jpg >
     
-    <form action="/admin/login" id = "logInForm" method="post">
-        <br>
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username" placeholder="Username" required>
-        <br>
-        <label for="password">Password:</label><br>
-        <input type="text" id="password" name="password" placeholder="Password" required>
-        <br>
-        <input type="submit" value="Log In" name="submit">
-    </form>
+    <link rel="stylesheet" href="styles.css" >
+    
+</header>
+<body class = "admin-page">
+    <a class = "back-btn" href = "/">Home</a>
+    <div class = "login-box">
+        <h2> Admin Log In </h2>
+        <form action="/admin/login" id = "logInForm" method="post">
+            <br>
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" placeholder="Username" required>
+            <br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <br>
+            <input class = "button" type="submit" value="Log In" name="submit">
+        </form>
+    </div>
+</body>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {

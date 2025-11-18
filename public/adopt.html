@@ -1,51 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Adoptable Animals</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js"></script>
-    <script src="animals.js"></script>
-  </head>
-  <body>
-    <header>
-      <h1>Adoptable Animals</h1>
-      <div class="nav">
-            <a class = "button" href = "/"> Home</a>
-            <a class = "button" href="/adopt">Adopt</a>
-            <a class = "button" href= /#about >About</a>
-            <a class = "button" href= /#contact >Contact</a>
-            <a class = "button" href = "/#donate">Donate</a>
-            <a class = "button" href="/foster">Foster</a>
-      </div>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adoptable Animals</title>
 
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Back Button</title>
-      <script>
-        // back button function:
-        function goBack() {
-          if (history.length > 1) {
-            history.back();
-          } else {
-            window.location.href = "index.html";
-          }
-        }
-      </script>
-    </head>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js"></script>
+  <script src="animals.js" defer></script>
 
-    <div class="row filter-controls">
-      <p><b>Animal: </b></p>
+</head>
+<body>
+
+  <nav class="nav">
+    <h1>UAH</h1>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/adopt">Adopt</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="#donate">Donate</a>
+      <a href="/foster">Foster</a>
+    </div>
+  </nav>
+  <div class="navspacer"></div>
+  
+  <h1>Adoptable Animals</h1>
+
+  <div class="filter-controls">
+    <label>
+      <b>Animal:</b>
       <select id="Animal">
         <option value="">Any</option>
         <option value="dog">Dog</option>
         <option value="cat">Cat</option>
       </select>
+    </label>
 
-      <p><b>Age: </b></p>
+    <label>
+      <b>Age:</b>
       <select id="Age">
         <option value="">Any</option>
         <option value="baby">Baby</option>
@@ -53,38 +46,35 @@
         <option value="adult">Adult</option>
         <option value="elderly">Elderly</option>
       </select>
+    </label>
 
-      <p><b>Activity Level: </b></p>
-      <select id="Activity-Level">
+    <label>
+      <b>Activity Level:</b>
+      <select id="ActivityLevel">
         <option value="">Any</option>
         <option value="low">Low</option>
         <option value="medium">Medium</option>
         <option value="high">High</option>
       </select>
+    </label>
 
-      <p><b>Gender: </b></p>
-      <select id="Activity-Level">
+    <label>
+      <b>Gender:</b>
+      <select id="Gender">
         <option value="">Any</option>
         <option value="male">Male</option>
         <option value="female">Female</option>
       </select>
-    </div>
+    </label>
+  </div>
 
-    <h1>Adoptable Animals List</h1>
-    <div class="row" id="tiles"></div>
+  <div class="row" id="tiles"></div>
 
-
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        if (typeof attachFilterListeners === "function")
-          attachFilterListeners();
-        if (typeof loadAnimals === "function") loadAnimals();
-
-      });
-
-
-       
-
-    </script>
-  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof attachFilterListeners === "function") attachFilterListeners();
+      if (typeof loadAnimals === "function") loadAnimals();
+    });
+  </script>
+</body>
 </html>
