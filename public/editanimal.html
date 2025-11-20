@@ -1,1 +1,400 @@
-<p> edit animal</p>
+<head>
+  <title> Admin View </title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- including supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js"></script>
+  <!-- including the js functions we made to query the db -->
+</head>
+<body>
+  <div class="nav">
+    <button class="back-button" onclick="window.location.href='admin.html'">Back</button>
+    <h1>Edit An Animal</h1>
+  </div>
+  <div class="navspacer"></div>
+
+  <div class="edit-page">
+
+    <!-- left panel animal list -->
+    <div class="left-panel">
+
+      <label class="search-label">Search:</label>
+      <input id="search-input" class="search-box" type="text" placeholder="Value">
+      <!--insert animals-->
+      <div id="animal-list"></div>
+
+    </div>
+
+    <!-- right side Edit Form -->
+    <div class="right-panel">
+    <div id="animal-detail-container" class="animal-detail-card"></div>
+
+      <!-- Tab buttons -->
+      <div class="tabs">
+        <button type="button" class="tab-button active" onclick="showTab('basic-info', this)">Basic Information</button>
+        <button type="button" class="tab-button" onclick="showTab('additional-info', this)">Additional
+          Information</button>
+      </div>
+
+      <!-- Edit Form -->
+      <form id="editAnimalForm">
+
+        <!-- BASIC INFORMATION TAB -->
+        <div id="basic-info" class="tab-content active">
+
+          <div class="form-row">
+            <div class="form-column">
+              <label>In Foster:</label>
+              <select id="infoster">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+
+              <label>Name:</label>
+              <input id="name" type="text">
+
+              <label>Type:</label>
+              <select id="animal">
+                <option value="Dog">Dog</option>
+                <option value="Cat">Cat</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-column">
+              <label>Intake Date:</label>
+              <input id="intakedate" type="date">
+
+              <label>Size:</label>
+              <select id="size">
+                <option>Small</option>
+                <option>Medium</option>
+                <option>Large</option>
+              </select>
+
+              <label>Gender:</label>
+              <select id="gender">
+                <option>Male</option>
+                <option>Female</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ADDITIONAL INFORMATION TAB -->
+        <div id="additional-info" class="tab-content">
+
+          <div class="form-row">
+
+            <div class="form-column">
+              <label>Age Group:</label>
+              <select id="agegroup">
+                <option>Baby</option>
+                <option>Young</option>
+                <option>Adult</option>
+                <option>Elderly</option>
+              </select>
+
+              <label>Description:</label>
+              <input id="description" type="text">
+
+              <label>Fixed Status:</label>
+              <select id="fixed">
+                <option>Fixed</option>
+                <option>Not Fixed</option>
+              </select>
+            </div>
+
+            <div class="form-column">
+              <label>Activity Level:</label>
+              <select id="activitylevel">
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+              </select>
+
+              <label>Good With:</label>
+              <input id="goodwith" type="text">
+
+              <label>Personality:</label>
+              <input id="personality" type="text">
+
+              <label>Image URL:</label>
+              <input id="image_url" type="text">
+            </div>
+
+          </div>
+        </div>
+
+        <!-- delete,submit buttons (red and green)-->
+        <div class="button-row">
+          <button type="button" class="delete-button" onclick="showModal()">Delete</button>
+          <button type="submit" class="submit-button">Submit</button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div id="delete-modal" class="modal-overlay">
+    <div class="modal-box">
+      <p>Are you sure you want to remove <span id="modal-animal-name">this animal</span>?</p>
+
+      <div class="modal-buttons">
+        <button class="cancel-button" onclick="hideModal()">Cancel</button>
+        <button id="confirm-delete" class="confirm-button">Yes, Remove</button>
+      </div>
+    </div>
+  </div>
+
+<!--javascript making buttons actually click and functionality-->
+<script>
+const SUPABASE_URL = "https://pijsxjlqxeqanknogalx.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpanN4amxxeGVxYW5rbm9nYWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1MTQ3MjUsImV4cCI6MjA3NzA5MDcyNX0.-UTF0fw7eBQZFlFK5H9FPy6FCiAwDBjj3oAM-lXfyEg";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let allAnimals = [];
+let selectedAnimalId = null;
+
+/* basic page load stuff*/
+document.addEventListener("DOMContentLoaded", function () {
+  loadAnimals();setUpSearch();setUpFormSubmit();setUpDeleteButtons();});
+
+/* load animals in he elft panel */
+async function loadAnimals() {
+  const listBox = document.getElementById("animal-list");
+  listBox.innerHTML = "<p>Loading...</p>";
+
+  const { data, error } = await supabaseClient
+    .from("animals")
+    .select("id, name")
+    .order("id", { ascending: true });
+
+  if (error) {
+    console.error(error);
+    listBox.innerHTML = "<p>Error loading animals</p>";
+    return;
+  }
+
+  allAnimals = data || [];
+  showAnimalList(allAnimals);
+}
+
+/* show animals as clickable tiles */
+function showAnimalList(dataToShow) {
+  const listBox = document.getElementById("animal-list");
+  listBox.innerHTML = "";
+
+  dataToShow.forEach((animal) => {
+    const box = document.createElement("div");
+    box.className = "animal-list-item";
+    box.innerHTML = `
+      <span class="animal-id">${animal.id}</span>
+      <span class="animal-name">${animal.name || "(no name)"}</span>
+    `;
+
+    box.addEventListener("click", function () {
+      document.querySelectorAll(".animal-list-item")
+        .forEach((i) => i.classList.remove("selected"));
+      box.classList.add("selected");
+      loadAnimalAndUpdateUI(animal.id);
+    });
+
+    listBox.appendChild(box);
+  });
+}
+
+/*loasind 1 animals*/
+async function loadAnimalAndUpdateUI(id) {
+  selectedAnimalId = id;
+
+  const { data, error } = await supabaseClient
+    .from("animals")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  renderPreviewCard(data);
+
+  fillFormFields(data);
+
+
+  const modalName = document.getElementById("modal-animal-name");
+  if (modalName) {
+    modalName.textContent = data.name || ("Animal " + data.id);
+  }
+}
+
+/* build the detail/preview view */
+function renderPreviewCard(animal) {
+  const container = document.getElementById("animal-detail-container");
+  if (!container) return;
+
+  const imgSrc = animal.image_url && animal.image_url.trim()
+    ? animal.image_url
+    : "img/default.jpg"; // fallback image
+
+  const name = animal.name || "Adoptable Animal";
+
+  container.innerHTML = `
+    <div class="animal-detail">
+      <img src="${imgSrc}" alt="${name}" class="detail-image">
+      <h2>${name}</h2>
+      <p><strong>Type:</strong> ${animal.animal || ""}</p>
+      <p><strong>Age:</strong> ${animal.age || animal.agegroup || ""}</p>
+      <p><strong>Gender:</strong> ${animal.gender || ""}</p>
+      <p><strong>Activity Level:</strong> ${animal.activitylevel || animal.activity_level || ""}</p>
+      <p><strong>Description:</strong> ${animal.description || ""}</p>
+    </div>
+  `;
+}
+function fillFormFields(animal) {
+const fields = [
+  "animal", "name", "agegroup", "gender", "infoster",
+  "intakedate", "activity_level", "size", "description",
+  "goodwith", "personality", "fixed", "image_url"
+];
+
+
+  fields.forEach((field) => {
+    const input = document.getElementById(field);
+    if (input) {
+      input.value = animal[field] || "";
+    }
+  });
+}
+
+/* search thru the supabase list of animals */
+function setUpSearch() {
+  const searchInput = document.getElementById("search-input");
+  searchInput.addEventListener("input", function () {
+    const q = searchInput.value.toLowerCase();
+    const filtered = allAnimals.filter((animal) => {
+      const idStr = String(animal.id);
+      const nameStr = (animal.name || "").toLowerCase();
+      return idStr.includes(q) || nameStr.includes(q);
+    });
+    showAnimalList(filtered);
+  });
+}
+
+/* update the submit button*/
+/* update */
+function setUpFormSubmit() {
+  const form = document.getElementById("editAnimalForm");
+  if (!form) return;
+
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault(); 
+    if (!selectedAnimalId) {
+      alert("Please click an animal from the left first.");
+      return;
+    }
+    const fields = [
+      "animal", "name", "agegroup", "gender", "infoster",
+      "intakedate", "activitylevel", "size", "description",
+      "goodwith", "personality", "fixed", "image_url"
+    ];
+    const updates = {};
+fields.forEach((field) => {
+  const el = document.getElementById(field);
+  if (!el) return;
+  const value = el.value;
+  if (field === "intakedate") {
+    updates[field] = value === "" ? null : value;
+  } else {
+    updates[field] = value;
+  }
+});
+
+    console.log("Updating ID:", selectedAnimalId, "with data:", updates);
+    const { data, error } = await supabaseClient
+      .from("animals")
+      .update(updates)
+      .eq("id", selectedAnimalId)
+      .select();
+    if (error) {
+      console.error("Supabase update error:", error);
+      alert("Error updating animal: " + error.message);
+      return;
+    }
+    if (!data || data.length === 0) {
+      // no row matched that id
+      alert("No animal was updated. Check that the animal ID exists and matches your database.");
+      return;
+    }
+    alert("Animal updated!");
+    await loadAnimals();
+    await loadAnimalAndUpdateUI(selectedAnimalId);
+  });
+}
+
+/*delete popup like we made in the figma (like with the red d button) */
+function setUpDeleteButtons() {
+  const confirmBtn = document.getElementById("confirm-delete");
+  if (confirmBtn) {
+    confirmBtn.addEventListener("click", deleteAnimal);
+  }
+}
+
+function showModal() {
+  document.getElementById("delete-modal").style.display = "flex";
+}
+window.showModal = showModal;
+
+function hideModal() {
+  document.getElementById("delete-modal").style.display = "none";
+}
+window.hideModal = hideModal;
+
+async function deleteAnimal() {
+  if (!selectedAnimalId) {
+    alert("No animal selected.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("animals")
+    .delete()
+    .eq("id", selectedAnimalId);
+
+  if (error) {
+    console.error(error);
+    alert("Error deleting animal.");
+    return;
+  }
+
+  alert("Animal deleted.");
+  hideModal();
+  selectedAnimalId = null;
+  document.getElementById("editAnimalForm").reset();
+  document.getElementById("animal-detail-container").innerHTML = "";
+  loadAnimals();
+}
+
+/* switching between basic infor tab and additonal info */
+function showTab(tabId, button) {
+  document.querySelectorAll(".tab-content")
+    .forEach((tab) => tab.classList.remove("active"));
+
+  document.querySelectorAll(".tab-button")
+    .forEach((btn) => btn.classList.remove("active"));
+
+  document.getElementById(tabId).classList.add("active");
+  button.classList.add("active");
+}
+window.showTab = showTab;
+</script>
+
+
+</body>
+
+</html>
