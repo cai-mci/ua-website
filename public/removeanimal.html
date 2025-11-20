@@ -1,1 +1,206 @@
-<p> remove animal</p>
+<head>
+  <title> Admin View </title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- including supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js"></script>
+  <!-- including the js functions we made to query the db -->
+</head>
+<body class="delete-page">
+  <div class="nav">
+    <button class="back-button" onclick="window.location.href='admin.html'">Back</button>
+    <h1>Remove An Animal</h1>
+  </div>
+  <div class="navspacer"></div>
+
+  <div class="edit-page">
+
+    <!-- left panel animal list -->
+    <div class="left-panel">
+
+      <label class="search-label">Search:</label>
+      <input id="search-input" class="search-box" type="text" placeholder="name of pet">
+      <!--insert animals-->
+      <div id="animal-list"></div>
+
+    </div>
+     <!-- delete buttons (red and green)-->
+        <div class="button-row">
+          <button type="button" class="delete-button" onclick="showModal()">Delete</button>
+
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div id="delete-modal" class="modal-overlay">
+    <div class="modal-box">
+      <p>Are you sure you want to remove <span id="modal-animal-name">this animal</span>?</p>
+
+      <div class="modal-buttons">
+        <button class="cancel-button" onclick="hideModal()">Cancel</button>
+        <button id="confirm-delete" class="confirm-button">Yes, Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const SUPABASE_URL = "https://pijsxjlqxeqanknogalx.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpanN4amxxeGVxYW5rbm9nYWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1MTQ3MjUsImV4cCI6MjA3NzA5MDcyNX0.-UTF0fw7eBQZFlFK5H9FPy6FCiAwDBjj3oAM-lXfyEg";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let allAnimals = [];
+let selectedAnimalId = null;
+
+/* basic page load stuff*/
+document.addEventListener("DOMContentLoaded", function () {
+  loadAnimals();
+  setUpSearch();
+  setUpDeleteButtons(); 
+});
+
+/* load animals in he elft panel */
+async function loadAnimals() {
+  const listBox = document.getElementById("animal-list");
+  listBox.innerHTML = "<p>Loading...</p>";
+
+  const { data, error } = await supabaseClient
+    .from("animals")
+    .select("id, name")
+    .order("id", { ascending: true });
+
+  if (error) {
+    console.error(error);
+    listBox.innerHTML = "<p>Error loading animals</p>";
+    return;
+  }
+
+  allAnimals = data || [];
+  showAnimalList(allAnimals);
+}
+
+/* show animals as clickable tiles */
+function showAnimalList(dataToShow) {
+  const listBox = document.getElementById("animal-list");
+  listBox.innerHTML = "";
+
+  dataToShow.forEach((animal) => {
+    const box = document.createElement("div");
+    box.className = "animal-list-item";
+    box.innerHTML = `
+      <span class="animal-id">${animal.id}</span>
+      <span class="animal-name">${animal.name || "(no name)"}</span>
+    `;
+
+    box.addEventListener("click", function () {
+  document.querySelectorAll(".animal-list-item")
+    .forEach((i) => i.classList.remove("selected"));
+  box.classList.add("selected");
+
+  selectedAnimalId = animal.id;
+  const modalName = document.getElementById("modal-animal-name");
+  if (modalName) {
+    modalName.textContent = animal.name || ("Animal " + animal.id);
+  }
+});
+
+
+    listBox.appendChild(box);
+  });
+}
+
+
+
+/* search thru the supabase list of animals */
+function setUpSearch() {
+  const searchInput = document.getElementById("search-input");
+  searchInput.addEventListener("input", function () {
+    const q = searchInput.value.toLowerCase();
+    const filtered = allAnimals.filter((animal) => {
+      const idStr = String(animal.id);
+      const nameStr = (animal.name || "").toLowerCase();
+      return idStr.includes(q) || nameStr.includes(q);
+    });
+    showAnimalList(filtered);
+  });
+}
+
+
+/*delete popup like we made in the figma (like with the red d button) */
+function setUpDeleteButtons() {
+  const confirmBtn = document.getElementById("confirm-delete");
+  if (confirmBtn) {
+    confirmBtn.addEventListener("click", deleteAnimal);
+  }
+}
+
+function showModal() {
+  if (!selectedAnimalId) {
+    alert("Please click an animal on the left first.");
+    return;
+  }
+  document.getElementById("delete-modal").style.display = "flex";
+}
+window.showModal = showModal;
+
+
+
+function hideModal() {
+  document.getElementById("delete-modal").style.display = "none";
+}
+window.hideModal = hideModal;
+
+async function deleteAnimal() {
+  if (!selectedAnimalId) {
+    alert("No animal selected.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("animals")
+    .delete()
+    .eq("id", selectedAnimalId);
+
+  if (error) {
+    console.error(error);
+    alert("Error deleting animal.");
+    return;
+  }
+
+  alert("Animal deleted.");
+  hideModal();
+  selectedAnimalId = null;
+  loadAnimals(); // reload the list
+}
+
+/*delete popup like we made in the figma (like with the red d button) */
+function setUpDeleteButtons() {
+  const confirmBtn = document.getElementById("confirm-delete");
+  if (confirmBtn) {
+    confirmBtn.addEventListener("click", deleteAnimal);
+  }
+}
+function setUpDeleteButtons() {
+  const confirmBtn = document.getElementById("confirm-delete");
+  if (confirmBtn) {
+    confirmBtn.addEventListener("click", deleteAnimal);
+  }
+}
+
+function showModal() {
+  document.getElementById("delete-modal").style.display = "flex";
+}
+window.showModal = showModal;
+
+function hideModal() {
+  document.getElementById("delete-modal").style.display = "none";
+}
+window.hideModal = hideModal;
+
+</script>
+</body> 
+
+ 
