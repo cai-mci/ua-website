@@ -8,7 +8,7 @@ router.get('/animals', async (req, res) => { // Route is now just '/' because of
         const { data, error } = await supabase
             .from("animals")
             .select("*")
-            .order("id", { ascending: true });
+            .order("intakedate", { ascending: false });
 
         if (error) throw error;
         res.json(data);
