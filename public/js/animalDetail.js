@@ -1,16 +1,21 @@
-const { supabase } = require('../../server/database.js');
-const {getImageSrc, labeledRow} = require('utils.js')
 
-//creates url for animal detail page
+import {getImageSrc, labeledRow} from './utils.js';
 
 //detail functions
+
 async function loadAnimal(id) {
-  const { data, error } = await supabase.from("animals").select("*").eq("id", id).single();
-  if (error) {
-    console.error("Error fetching animal details:", error);
-    return null;
-  }
-  return data;
+    try {
+
+        const response = await fetch(`/api/animal/${id}`); 
+
+        if (response.status === 404) return null;
+        if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+        return await response.json();
+
+    } catch (error) {
+        console.error("Error fetching animal details from server:", error);
+        return null;
+    }
 }
 
 
@@ -45,11 +50,6 @@ async function displayAnimalDetails(id) {
   }
 }
 
-
-module.exports = {
-    loadAnimal,
-    displayAnimalDetails,
-};
 
 
 document.addEventListener('DOMContentLoaded', () => {
