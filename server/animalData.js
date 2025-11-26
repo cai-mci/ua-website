@@ -3,7 +3,7 @@ const router = express.Router(); // Use Router instead of the main app object
 const { supabase } = require('./database.js'); // Adjust path as needed
 
 // Define the route logic
-router.get('/', async (req, res) => { // Route is now just '/' because of how it's used below
+router.get('/animals', async (req, res) => { // Route is now just '/' because of how it's used below
     try {
         const { data, error } = await supabase
             .from("animals")
@@ -46,6 +46,8 @@ router.get('/animal/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to retrieve animal details from database.' });
     }
 });
+
+
 
 
 module.exports = router;

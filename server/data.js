@@ -19,3 +19,4 @@ async function insertAnimal(animalData) {
     }
     return data;
 }
+module.exports = {insertAnimal};
