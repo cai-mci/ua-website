@@ -16,7 +16,7 @@ This project is a full-stack web application designed to manage and display adop
 
 ## 💻 Technical Stack
 
-| Category | Technology | Purpose |
+| Category | Technology |
 | :--- | :--- |
 | **Backend (Server)** | **Node.js, Express.js** |
 | **Database** | **Supabase** |
