@@ -1,0 +1,1 @@
+const { supabase } = require('../../server/database.js');

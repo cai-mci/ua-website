@@ -6,20 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js"></script>
-    <script defer src="animals.js"></script>
+    <script defer src="js/animalDetail.js"></script>
   </head>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const el = document.getElementById('animal-detail-container');
-      const params = new URLSearchParams(window.location.search);
-      const id = Number(params.get('id'));
-      if (Number.isFinite(id) && id > 0) {
-        displayAnimalDetails(id);
-      } else {
-        el.innerHTML = '<h1>Animal Not Found</h1><p>No animal ID was provided in the URL.</p>';
-      }
-    });
-  </script>
   
   <body>
     <header>
@@ -33,18 +21,5 @@
     <div id="animal-detail-container">
       <p>Loading animal details...</p>
     </div>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const params = new URLSearchParams(window.location.search);
-        const animalId = Number(params.get("id"));
-        if (Number.isFinite(animalId) && animalId > 0) {
-          displayAnimalDetails(animalId);
-        } else {
-          document.getElementById("animal-detail-container").innerHTML =
-            "<h1>Animal Not Found</h1><p>No animal ID was provided in the URL.</p>";
-        }
-      });
-    </script>
   </body>
 </html>
