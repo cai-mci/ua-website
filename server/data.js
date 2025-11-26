@@ -1,10 +1,7 @@
-// server/data.js
-
 const { createClient } = require('@supabase/supabase-js');
 const dotenv = require('dotenv');
 dotenv.config();
 
-// Initialize Supabase Client (Only needs to happen once)
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -14,7 +11,7 @@ async function insertAnimal(animalData) {
     const { data, error } = await supabase
         .from('animals')
         .insert([animalData])
-        .select(); // Use .select() to return the inserted data
+        .select(); 
 
     if (error) {
         console.error("Supabase Insert Error:", error);
@@ -22,11 +19,3 @@ async function insertAnimal(animalData) {
     }
     return data;
 }
-
-
-
-
-
-module.exports = {
-    insertAnimal,
-};
