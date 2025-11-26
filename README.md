@@ -23,36 +23,33 @@ This project is a full-stack web application designed to manage and display adop
 | **Client-Side** | **HTML, CSS, ES Modules (JavaScript)** |
 
 ---
+## 📁 Architecture Guide for Developers
 
-## 📁 Architecture & File Guide for Developers
+The project uses a two-part architecture: **Server (Node.js/CommonJS)** for security and data, and **Client (Browser/ES Modules)** for the UI.
 
-The project uses a standard separation between the **Server (Node.js)** and the **Client (Public)** directories. New functionality should be placed according to the following guide.
+### I. Server Components (Secure Data Access & Routing)
 
-### I. Server Components (Secure, Node.js Environment)
-
-These files handle all database access, security, and routing. They use the **CommonJS** module system (`require`/`module.exports`).
-
-| File | Role & Purpose | Where to Add New Logic |
+| File | Role | New Functionality Goes Here |
 | :--- | :--- | :--- |
-| `server.js` | **Application Entry Point.** Initializes Express, loads middleware (`express.json`), and mounts all routers (`app.use`). | **Only** new middleware or mounting a new top-level router. |
-| `server/database.js` | **Database Client.** Initializes the Supabase client using environment variables (`dotenv`). | **No changes** (unless switching database technology). |
-| `server/data.js` | **Data Layer/Repository.** Contains reusable, plain asynchronous functions that perform direct database operations (e.g., `insertAnimal`). | **New functions** to interact with the database (e.g., `deleteAnimal(id)`, `updateAnimal(id, data)`). |
-| `server/auth.js` | **Authentication Router.** Contains routes and logic specifically for user authentication. | New endpoints/logic for user registration, password reset, or session management (e.g., `router.post('/logout')`). |
-| `server/routes.js` | **General Routes.** Serving all HTML pages (`.get('/adopt')`), | New routes for general page views . |
-| `server/animalEdits.js` | **Admin API Router.** Contains Administrative API endpoints (e.g., `.post('/admin/addanimal')`. | New admin actions (e.g., adding or editing data) |
-| `server/animalData.js` | **Public API Router.** Contains API endpoints for reading public data without authentication. | New `GET` API endpoints for fetching lists of animals, filtering, or sorting for the public view (e.g., `router.get('/animals')`). |
+| `server.js` | **App Entry Point** | Configuration and mounting new top-level routes. |
+| `server/database.js` | **DB Client** | **No changes** (initializes Supabase connection). |
+| `server/data.js` | **Data Repository** | New **DB query functions** (`deleteAnimal`, `updateAnimal`, etc.). |
+| `server/auth.js` | **Auth Router** | New **Endpoints** for login/logout/user management. |
+| `server/routes.js` | **Page Router** | New **Routes** for serving general HTML pages. |
+| `server/animalEdits.js` | **Admin API** | New **Admin API Endpoints** for creating, editing, or deleting animal records. |
+| `server/animalData.js` | **Public API** | New **GET API Endpoints** for fetching public, read-only animal lists. |
 
 ---
 
-### II. Public Components (Client-Side, Browser Environment)
+### II. Public Components (Client-Side Interface & Logic)
 
-These files contain the front-end code (HTML, CSS, JavaScript) that runs in the user's browser. JavaScript files use the **ES Module** system (`import`/`export`) and communicate with the server via the **Fetch API**.
+These files use the **ES Module** system (`import`/`export`) and communicate with the server via the **Fetch API**.
 
-| File | Role & Purpose | Where to Add New Logic |
+| File | Role | New Functionality Goes Here |
 | :--- | :--- | :--- |
-| `public/*.html` | **Page Templates.** Defines the structure and content of each view. | New sections, IDs, or inputs required for new client-side features. |
-| `public/styles.css` | **Styling.** Contains all cascading style sheets. | New styles or updates to existing styles. |
-| `public/js/utils.js` | **Utility Functions.** Contains small, reusable, pure functions (e.g., `nonEmpty`, `getImageSrc`). | **New utility functions** that are needed in multiple client-side files (e.g., input validation helpers). |
-| `public/js/animalLoading.js` | **Public Listing Logic.** Responsible for fetching the list of animals, handling filtering, and rendering the tiles on `adopt.html`. | New logic for advanced filtering, searching, or pagination of the main list. |
-| `public/js/animalDetail.js` | **Detail Page Logic.** Responsible for fetching data for a single animal (by ID) and rendering the full details on `animaldetail.html`. | New rendering logic for displaying additional fields or formatting complex data. |
-| `public/js/animalEditing.js` | **Admin Form Logic.** Handles the submission of data from admin forms (add/edit) to the server's API endpoints. | New logic for validating form inputs before sending them to the server, or binding new form elements to the submission handler. |
+| `public/*.html` | **Templates** | New structure/inputs for pages. |
+| `public/styles.css` | **Styling** | All new CSS rules. |
+| `public/js/utils.js` | **Utilities** | New reusable, pure helper functions. |
+| `public/js/animalLoading.js` | **Adoption List Logic** | New logic for filtering, searching, or rendering the main animal list. |
+| `public/js/animalDetail.js` | **Detail Page Logic** | New logic for rendering single animal details. |
+| `public/js/animalEditing.js` | **Admin Form Logic** | New logic for validating or submitting admin forms (add/edit). |
