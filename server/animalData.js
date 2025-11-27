@@ -1,8 +1,10 @@
 const express = require('express');
-const router = express.Router(); // Use Router instead of the main app object
+const router = express.Router(); 
 
 const {getAnimal, getAnimals} = require('./dataOperations.js');
 
+
+//adopt page: show all animals (with optional filters)
 router.get('/animals', async (req, res) => { 
     try {
         const filters = req.query;
@@ -16,8 +18,10 @@ router.get('/animals', async (req, res) => {
 });
 
 
+
+//animal details page: get a single animal by id
 router.get('/animal/:id', async (req, res) => {
-    const animalId = req.params.id; // Extract the ID from the URL path
+    const animalId = req.params.id; 
 
     try {
         const data = await getAnimal(animalId);   
@@ -28,8 +32,5 @@ router.get('/animal/:id', async (req, res) => {
         res.status(500).json({ error: 'Failed to retrieve animal details from database.' });
     }
 });
-
-
-
 
 module.exports = router;

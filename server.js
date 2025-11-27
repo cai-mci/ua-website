@@ -11,11 +11,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const routes = require('./server/routes.js');
 const authRouter = require('./server/auth.js');
-const animalsRouter = require('./server/animalData.js'); 
+const animalReadRouter = require('./server/animalData.js'); 
+const animalEditsRouter = require('./server/animalEdits.js');
 
 app.use('/', routes); 
 app.use('/admin', authRouter); 
-app.use('/api', animalsRouter);
+app.use('/view', animalReadRouter);
+app.use('/animals', animalEditsRouter);
+
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
