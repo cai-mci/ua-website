@@ -33,7 +33,7 @@ The project uses a two-part architecture: **Server (Node.js/CommonJS)** for secu
 | :--- | :--- | :--- |
 | `server.js` | **App Entry Point** | Configuration and mounting new top-level routes. |
 | `server/database.js` | **DB Client** | **No changes** (initializes Supabase connection). |
-| `server/data.js` | **Data Repository** | New **DB query functions** (`deleteAnimal`, `updateAnimal`, etc.). |
+| `server/dataOperations.js` | **Data Repository** | New **DB query functions** (`deleteAnimal`, `updateAnimal`, etc.). |
 | `server/auth.js` | **Auth Router** | New **Endpoints** for login/logout/user management. |
 | `server/routes.js` | **Page Router** | New **Routes** for serving general HTML pages. |
 | `server/animalEdits.js` | **Admin API** | New **Admin API Endpoints** for creating, editing, or deleting animal records. |
@@ -47,6 +47,7 @@ These files use the **ES Module** system (`import`/`export`) and communicate wit
 
 | File | Role | New Functionality Goes Here |
 | :--- | :--- | :--- |
+| `admin/*.html` | **Admin-only access templates** | New structure/inputs for admin pages. |
 | `public/*.html` | **Templates** | New structure/inputs for pages. |
 | `public/styles.css` | **Styling** | All new CSS rules. |
 | `public/js/utils.js` | **Utilities** | New reusable, pure helper functions. |
