@@ -7,7 +7,7 @@ const express = require('express');
 const router = express.Router();
 // const bcrypt = require('bcrypt'); // Keep bcrypt if you switch to hashing
 
-const { getUser } = require('./data.js');
+const { getUser } = require('./dataOperations.js');
 
 // POST /admin/login
 router.post('/login', async (req, res) => {

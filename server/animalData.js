@@ -1,17 +1,14 @@
 const express = require('express');
 const router = express.Router(); // Use Router instead of the main app object
 const { supabase } = require('./database.js'); // Adjust path as needed
+const {getAnimal, getAnimals} = require('./dataOperations.js');
 
-// Define the route logic
-router.get('/animals', async (req, res) => { // Route is now just '/' because of how it's used below
+router.get('/animals', async (req, res) => { 
     try {
-        const { data, error } = await supabase
-            .from("animals")
-            .select("*")
-            .order("intakedate", { ascending: false });
+        const filters = req.query;
+        const data = await getAnimals(filters);
 
-        if (error) throw error;
-        res.json(data);
+        res.status(200).json({ success: true, count: data.length, data: data });
     } catch (error) {
         console.error('API Fetch Error:', error);
         res.status(500).json({ error: 'Failed to fetch animals from database.' });

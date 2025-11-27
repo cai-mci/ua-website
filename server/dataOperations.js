@@ -33,7 +33,6 @@ async function deleteAnimal(id) {
         console.error("Supabase Delete Error:", error);
         throw error;
     }
-    return 0;
 }
 
 
@@ -68,10 +67,10 @@ async function bringbackAnimal(id) {
 }
 
 //update animal
-async function editAnimal(newData) {
+async function editAnimal(newData, id) {
     const { data, error } = await supabase
         .from('animals')
-        .update([newData])
+        .update(newData)
         .eq('id', id)
         .select(); 
 

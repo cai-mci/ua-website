@@ -10,28 +10,22 @@ async function loadAnimals() {
     if (!tiles) return; // Stop if the tile container is missing
     tiles.innerHTML = "<p>Loading…</p>"; // Show loading message
 
-    // 2. MODIFIED: Fetch data from the new server API endpoint
     let data;
     try {
-        // Fetch data from the endpoint defined in animalsApi.js
         const response = await fetch('/api/animals'); 
         
         if (!response.ok) {
-            // Throw error if the server returned a 4xx or 5xx status
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         
-        // 3. HANDLE RAW DATA: Get the JSON array sent by the server
-        data = await response.json(); 
+        responseData = await response.json();
+        data = responseData.data 
 
     } catch (fetchError) {
-        // Handle fetch errors (like network connection issue)
         console.error("Fetch error:", fetchError);
         tiles.innerHTML = `<p class="error">Could not load animals. Check the server is running.</p>`;
         return;
     }
-
-    // --- Data is now successfully loaded into the 'data' variable ---
 
   //Get current filter settings
   const ui = getFilters();
@@ -132,4 +126,4 @@ function attachFilterListeners() {
     if (el) el.addEventListener("change", () => loadAnimals());
   });
 }
-window.attachFilterListeners = attachFilterListeners;
+
