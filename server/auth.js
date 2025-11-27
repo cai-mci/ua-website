@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-// const bcrypt = require('bcrypt'); // Keep bcrypt if you switch to hashing
+// const bcrypt = require('bcrypt'); 
 
 const { getUser } = require('./dataOperations.js');
 
@@ -12,7 +12,7 @@ router.post('/login', async (req, res) => {
     // console.log(password);
 
     if (!username || !password) {
-        // 400 Bad Request: Missing input
+
         return res.status(400).json({ success: false, message: 'Username and password are required.' });
     }
 
