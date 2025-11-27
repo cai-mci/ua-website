@@ -4,7 +4,7 @@ import { getImageSrc, labeledRow } from "./utils.js";
 
 async function loadAnimal(id) {
   try {
-    const response = await fetch(`/api/animal/${id}`);
+    const response = await fetch(`/view/animal/${id}`);
 
     if (response.status === 404) return null;
     if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);

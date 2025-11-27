@@ -12,7 +12,7 @@ async function loadAnimals() {
 
     let data;
     try {
-        const response = await fetch('/api/animals'); 
+        const response = await fetch('/view/animals'); 
         
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -114,7 +114,7 @@ function passesFilters(rec, ui) {
 function getFilters() {
   const species  = (document.getElementById("Animal")?.value || "").toLowerCase();
   const age      = (document.getElementById("Age")?.value || "").toLowerCase();
-  const activity = (document.getElementById("Activity-Level")?.value || "").toLowerCase();
+  const activity = (document.getElementById("ActivityLevel")?.value || "").toLowerCase();
   const gender   = (document.getElementById("Gender")?.value || "").toLowerCase();
   return { species, age, activity, gender };
 }
