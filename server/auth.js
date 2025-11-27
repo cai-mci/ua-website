@@ -7,19 +7,7 @@ const express = require('express');
 const router = express.Router();
 // const bcrypt = require('bcrypt'); // Keep bcrypt if you switch to hashing
 
-async function findAdminUser(username) {
-    const { data, error } = await supabase
-        .from("admin")
-        .select('*')
-        .eq('username', username)
-        .single();
-    
-    if (error && error.code !== 'PGRST116') { // PGRST116 means "no rows found"
-        throw error;
-    }
-    return data;
-}
-
+const { getUser } = require('./data.js');
 
 // POST /admin/login
 router.post('/login', async (req, res) => {
@@ -27,7 +15,7 @@ router.post('/login', async (req, res) => {
 
     // 1. Find the user in the database
     try {
-        const user = await findAdminUser(username);
+        const user = await getUser(username);
 
         if (!user) { 
             return res.status(404).send('User not found'); 
