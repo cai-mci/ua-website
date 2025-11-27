@@ -42,6 +42,7 @@ router.patch('/:id/adopt', async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to update adoption status.', error: error.message });
     }
 });
+
 //bring back (show on main page) animal
 router.patch('/:id/bringback', async (req, res) => {
     try {
