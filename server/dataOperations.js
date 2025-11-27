@@ -71,8 +71,8 @@ async function editAnimal(newData, id) {
     const { data, error } = await supabase
         .from('animals')
         .update(newData)
-        .eq('id', id)
-        .select(); 
+        .select()
+        .eq('id', id); 
 
     if (error) {
         console.error("Supabase Update Error:", error);
@@ -121,8 +121,9 @@ async function getAnimals(filters = {}) {
 async function getUser(username) {
     const { data, error } = await supabase
         .from('admin')
+        .select()
         .eq('username', username)
-        .select(); 
+        .single(); 
 
     if (error) {
         console.error("Supabase Select Error:", error);

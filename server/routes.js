@@ -20,6 +20,7 @@ router.get('/foster', (req, res) => serveHtml('foster.html', req, res));
 
 //ADMIN ROUTES
 router.get('/admin', (req, res) => serveHtml('login.html', req, res));
+router.get('/admin/home', (req, res) => serveHtml('admin.html', req, res));
 router.get('/admin/add', (req, res) => serveHtml('addanimal.html', req, res));
 router.get('/admin/remove', (req, res) => serveHtml('removeanimal.html', req, res));
 router.get('/admin/edit', (req, res) => serveHtml('editanimal.html', req, res));

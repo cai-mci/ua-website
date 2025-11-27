@@ -1,7 +1,3 @@
-const { supabase } = require('./database.js'); // Adjust path as needed
-
-
-// server/auth.js
 
 const express = require('express');
 const router = express.Router();
@@ -12,20 +8,26 @@ const { getUser } = require('./dataOperations.js');
 // POST /admin/login
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
+    // console.log(username);
+    // console.log(password);
 
-    // 1. Find the user in the database
+    if (!username || !password) {
+        // 400 Bad Request: Missing input
+        return res.status(400).json({ success: false, message: 'Username and password are required.' });
+    }
+
     try {
         const user = await getUser(username);
+        // console.log(user.username);
+        // console.log(user.password);
 
         if (!user) { 
             return res.status(404).send('User not found'); 
         }
 
-        // 2. Compare passwords
-        // NOTE: The original code was using direct comparison (password == data.password)
-        // For security, you should use bcrypt.compare(password, user.password)
+
         if (password === user.password) {
-            console.log(`Login Success for: ${username}`);
+            // console.log(`Login Success for: ${username}`);
             res.status(200).send('Success'); 
         } else {
             res.status(401).send('Wrong Password');

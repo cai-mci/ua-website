@@ -3,7 +3,8 @@
     <link rel="icon" type = "image/x-icon" href= img\logo.jpg >
     
     <link rel="stylesheet" href="styles.css" >
-    
+
+    <script src="js/adminLogin.js"></script>
 </header>
 <body class = "admin-page">
     <a class = "back-btn" href = "/">Home</a>
@@ -22,51 +23,3 @@
     </div>
 </body>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        try {
-            //making sure that we don't try to getelementbyid until after the user clicks submit
-            const form = document.getElementById('logInForm');
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-
-                //pass the username & pass to the server as res
-                const res =  await fetch('/admin/login', {
-                    method: 'Post',
-                    headers: {'Content-Type' : 'application/json'},
-                    body: JSON.stringify({ username, password })
-                });
-
-
-                // //turn the response into data -> send to console for debugging
-                // const data = res.json();
-                // console.log(data);
-                if (res.status === 200) {
-                    // login success → redirect to admin page
-                    window.location.href = '/admin.html';
-                } else if (res.status === 401) {
-                    alert('Wrong password');
-                } else if (res.status === 404) {
-                    alert('User not found');
-                } else if (res.status === 500) {
-                    alert('Database Error');
-                } else if (res.status === 501) {
-                    alert('Comparison error');
-                } else {
-                    alert('Server error');
-                }
-                    
-            });
-        
-        } catch (err) {
-            console.log('didntwork')
-            console.error(err);
-            // alert('Request failed');
-        }
-
-
-    });           
-
-    </script>
