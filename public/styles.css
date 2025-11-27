@@ -803,3 +803,105 @@ form select {
     border-radius: 8px;
 }
 
+/* animal detail page - individual views for every animal selected*/
+
+.animal-detail-page {
+  background-color: #f5f5f5;
+  font-family: Arial, sans-serif;
+}
+
+/* white card that holds both columns */
+.detail-card {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* info on the left, photo on the right */
+.detail-layout {
+  display: flex;
+  gap: 40px;
+}
+
+/* left column (all the text) */
+.detail-info {
+  flex: 1;
+}
+
+.detail-info h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.detail-subtitle {
+  font-size: 16px;
+  margin: 4px 0 16px 0;
+}
+
+.detail-intake {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.detail-section-label {
+  font-weight: bold;
+}
+
+.detail-description-block {
+  margin-top: 20px;
+}
+
+/* "Interested in adopting?" section */
+.detail-interest {
+  margin-top: 30px;
+}
+
+.detail-interest-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.detail-cta-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 5px;
+}
+
+.detail-cta-primary,
+.detail-cta-secondary {
+  padding: 10px 18px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+}
+
+.detail-cta-primary {
+  background: #111827;
+  color: #ffffff;
+}
+
+.detail-cta-secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+/* right column (photo */
+.detail-photo {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.detail-photo img {
+  max-width: 100%;
+  max-height: 450px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
