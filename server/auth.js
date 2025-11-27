@@ -5,6 +5,7 @@ const router = express.Router();
 
 const { getUser } = require('./dataOperations.js');
 
+
 // POST /admin/login
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -28,6 +29,7 @@ router.post('/login', async (req, res) => {
 
         if (password === user.password) {
             // console.log(`Login Success for: ${username}`);
+            req.session.isAdmin = true;
             res.status(200).send('Success'); 
         } else {
             res.status(401).send('Wrong Password');
@@ -37,6 +39,7 @@ router.post('/login', async (req, res) => {
         res.status(500).send('Database error during login check');
     }
 });
+
 
 
 module.exports = router;

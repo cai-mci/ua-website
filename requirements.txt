@@ -3,6 +3,7 @@ npm install @supabase/supabase-js
 npm install bcrypt
 
 npm install express
+npm install express-session
 
 npm install dotenv
 
