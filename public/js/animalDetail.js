@@ -41,7 +41,10 @@ async function displayAnimalDetails(id) {
     const goodwith = animal.goodwith || "";
     const description = animal.description || "";
 
-    const imgSrc = getImageSrc(animal);
+    const default_img = "/animal/" + animal.animal + ".png";
+    const imgSrc = animal.image_url && animal.image_url.trim()
+      ? animal.image_url
+      : default_img;
     container.innerHTML = `
       <div class="detail-info">
         <h1>${name}</h1>

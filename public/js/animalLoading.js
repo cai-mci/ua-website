@@ -65,9 +65,11 @@ async function renderAnimalTiles(filtered) {
     a.href = buildDetailHref(animal.id);
 
     const img = document.createElement("img");
-    img.src = animal.image_url || animal.image || "img/default.jpg";
-    img.alt = "";
-    img.onerror = onImgError;
+    const default_img = "/animal/" + animal.animal + ".png";
+    img.src = animal.image_url && animal.image_url.trim()
+    ? animal.image_url
+    : default_img;
+
 
     const h3 = document.createElement("h3");
     h3.textContent = animal.name || "Adoptable Animal";
