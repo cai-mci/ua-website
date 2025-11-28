@@ -1,5 +1,37 @@
 import { loadAnimalsFromAPI } from './adminHandlers.js';
 
+
+async function adoptAnimal(id) {
+    const url = "/"+ id + "/adopt"
+    try {
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json' 
+            }
+        });
+
+        if (response.ok) {
+            console.log("Animal modified successfully");
+            alert("Animal is no longer listed on site");
+            loadAnimalsList();
+
+            return true;
+        } else {
+            console.error("Server update error:", result.message || "Unknown error");
+            alert('Error modifying animal.');
+            return false;
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("Error: Could not reach the server.");
+        return false;
+    }
+}
+
+
+
 //use this in html
 export async function loadAndShow() {
     let animals;
