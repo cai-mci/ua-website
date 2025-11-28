@@ -1,31 +1,7 @@
-
 //LOADING
 function buildDetailHref(id) {
     return "animaldetail.html?id=" + encodeURIComponent(String(id));
 }  
-
-async function loadAndFilterAnimals() {
-    const tiles = document.getElementById("tiles");
-    if (!tiles) return; 
-    
-    tiles.innerHTML = "<p>Loading…</p>"; 
-    
-    let allAnimals;
-    try {
-        allAnimals = await loadAnimalsFromAPI();
-    } catch (fetchError) {
-        console.error("Fetch error:", fetchError);
-        tiles.innerHTML = `<p class="error">Could not load animals. Check the server is running.</p>`;
-        return;
-    }
-
-    const ui = getFilters();
-    
-    const filteredAnimals = allAnimals.filter((rec) => passesFilters(rec, ui));
-
-    renderAnimalTiles(filteredAnimals);
-}
-
 
 async function loadAnimalsFromAPI() {
   const response = await fetch('/view/animals'); 
@@ -34,14 +10,45 @@ async function loadAnimalsFromAPI() {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
 
-  responseData = await response.json();
-  data = responseData.data 
+  const responseData = await response.json();
+  const data = responseData.data 
   return data;
 }
 
+
+export async function loadAndFilterAnimals() {
+  console.log("loading and filtering")
+  const tiles = document.getElementById("tiles");
+  if (!tiles) return; 
+  console.log("got tiles")
+
+  
+  tiles.innerHTML = "<p>Loading…</p>"; 
+  
+  let allAnimals;
+  try {
+      allAnimals = await loadAnimalsFromAPI();
+  } catch (fetchError) {
+      console.error("Fetch error:", fetchError);
+      tiles.innerHTML = `<p class="error">Could not load animals. Check the server is running.</p>`;
+      return;
+  }
+
+  const ui = getFilters();
+  
+  const filteredAnimals = allAnimals.filter((rec) => passesFilters(rec, ui));
+
+  renderAnimalTiles(filteredAnimals);
+}
+
+
+
+
 async function renderAnimalTiles(filtered) {
   const tiles = document.getElementById("tiles");
-  if (!tiles) return; // Stop if the tile container is missing
+  if (!tiles) {
+    return;
+  } // Stop if the tile container is missing
   tiles.innerHTML = "<p>Loading…</p>"; // Show loading message
 
   //  Handle no results
@@ -131,10 +138,10 @@ function getFilters() {
 }
 
 //attaches to filter dropwdowns
-function attachFilterListeners() {
+export function attachFilterListeners() {
   ["Animal", "Age", "Activity-Level", "Gender"].forEach((id) => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener("change", () => loadAnimalTiles());
+    if (el) el.addEventListener("change", () => loadAndFilterAnimals());
   });
 }
 

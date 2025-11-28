@@ -40,20 +40,37 @@ async function addAnimal(newAnimalData) {
 //remove page
 
 //get the animals & then call showAnimalList
-async function loadAnimalList() {
-    const res = await fetch('/view/animals', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    });
 
-    if (!res.ok) {
-        throw new Error(`Failed to fetch animals: ${res.status} ${res.statusText}`);
+async function loadAnimalsFromAPI() {
+  const response = await fetch('/view/animals'); 
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  responseData = await response.json();
+  data = responseData.data;
+  return data;
+}
+
+
+async function loadAndShow() {
+    let animals;
+    try {
+    const rawAnimalData = await loadAnimalsFromAPI();
+    animals = await rawAnimalData.filter(a => a.adoptable === true);
+    showAnimalList(animals);
+    } catch (error) {
+        console.error("Error loading animal list:", error);
+
+        const listBox = document.getElementById("animal-list");
+        if (listBox) {
+            listBox.innerHTML = `<p class="error p-2">Failed to load data</p>`;
+        }
     }
+    return animals;
 
-    const animalData = await res.json(); 
-    showAnimalList(animalData); 
+
 }
 
 function showAnimalList(dataToShow) {
@@ -91,19 +108,19 @@ function showAnimalList(dataToShow) {
 }
 
 
-//search
-function setUpSearch() {
-  const searchInput = document.getElementById("search-input");
-  searchInput.addEventListener("input", () => {
-    const q = searchInput.value.toLowerCase();
-    const filtered = allAnimals.filter((animal) => {
-      const idStr = String(animal.id);
-      const nameStr = (animal.name || "").toLowerCase();
-      return idStr.includes(q) || nameStr.includes(q);
-    });
-    showAnimalList(filtered);
-  });
-}
+// //search
+// function setUpSearch() {
+//   const searchInput = document.getElementById("search-input");
+//   searchInput.addEventListener("input", () => {
+//     const q = searchInput.value.toLowerCase();
+//     const filtered = allAnimals.filter((animal) => {
+//       const idStr = String(animal.id);
+//       const nameStr = (animal.name || "").toLowerCase();
+//       return idStr.includes(q) || nameStr.includes(q);
+//     });
+//     showAnimalList(filtered);
+//   });
+// }
 
 async function adoptAnimal(id) {
     const url = "/"+ id + "/adopt"

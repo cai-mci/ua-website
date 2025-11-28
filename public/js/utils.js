@@ -16,5 +16,3 @@ export function getImageSrc(animal) {
   if (nonEmpty(animal.image)) return animal.image;
   return "img/default.jpg";
 };
-
-
