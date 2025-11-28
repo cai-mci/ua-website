@@ -1,7 +1,7 @@
 <header>
     <title> Admin View </title>
     <link rel="stylesheet" href="/styles.css">
-    <script src="/js/adminHandlers.js"></script>
+    <script src="/js/adminAddHandlers.js"></script>
 
 </header>
 
@@ -16,9 +16,6 @@
     <!-- add a new pet -->
     <form id = "animalForm">
         <p class = "form_header">Mandatory Fields</p>
-        <label for="Id">Id:</label><br>
-        <input type="text" id="id" name="id" placeholder="ID num:" required>
-        <br>
         <label for="Name">Name:</label><br>
         <input type="text" id="name" name="name" placeholder="Pet's Name" required>
         <br>
@@ -135,7 +132,7 @@
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 // fields
-                const fields = ["id", "animal", "name", "agegroup", "gender", "infoster", "intakedate", "activitylevel", "size", "age", "description", "goodwith", "personality", "health", "breed", "weight", "hypoallergenic", "fixed"];
+                const fields = ["animal", "name", "agegroup", "gender", "infoster", "intakedate", "activitylevel", "size", "age", "description", "goodwith", "personality", "health", "breed", "weight", "hypoallergenic", "fixed"];
   
                 newData = {}
                 for (let i = 0; i < fields.length; i++) {

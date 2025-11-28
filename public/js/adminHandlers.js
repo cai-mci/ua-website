@@ -1,40 +1,6 @@
 //add page
 
-async function addAnimal(newAnimalData) {
-    try {
-        const response = await fetch('/animals', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' 
-            },
-            body: JSON.stringify(newAnimalData) 
-        });
 
-
-        const result = await response.json(); 
-
-        if (response.ok) {
-            console.log("Animal inserted successfully");
-            alert("Animal Inserted Successfully");
-            //  clear  form 
-            const formElement = document.getElementById('animalForm');
-            if (formElement) {
-                formElement.reset(); 
-            }
-
-            return true;
-        } else {
-            console.error("Server insertion error:", result.message || "Unknown error");
-            alert('Error inserting animal.');
-            return false;
-        }
-
-    } catch (error) {
-        console.error(error);
-        alert("Error: Could not reach the server.");
-        return false;
-    }
-}
  
 
 //remove page
