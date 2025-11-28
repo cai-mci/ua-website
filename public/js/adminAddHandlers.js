@@ -1,5 +1,5 @@
-async function addAnimal(newAnimalData) {
-    console.log(newAnimalData);
+export async function addAnimal(newAnimalData) {
+    console.log("passed in data: ", newAnimalData);
     try {
         const response = await fetch('/animals', {
             method: 'POST',
@@ -10,7 +10,7 @@ async function addAnimal(newAnimalData) {
         });
 
 
-        console.log(response);
+        console.log("resposne:", response);
         if (response.ok) {
             console.log(response.data);
             console.log("Animal inserted successfully");

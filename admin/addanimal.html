@@ -1,7 +1,7 @@
 <header>
     <title> Admin View </title>
     <link rel="stylesheet" href="/styles.css">
-    <script src="/js/adminAddHandlers.js"></script>
+    <script type = "module" src="/js/adminAddHandlers.js"></script>
 
 </header>
 
@@ -13,6 +13,10 @@
     </div>
     <div class="navspacer"></div>
     
+    <!-- for errors, etc instead of alert! -->
+    <div id="message-box" style="display: none;">
+        <p>MESSAGE BOX</p>
+    </div>
     <!-- add a new pet -->
     <form id = "animalForm">
         <p class = "form_header">Mandatory Fields</p>
@@ -110,30 +114,81 @@
             <option value="Hypoallergenic">Hypoallergenic</option>
         </select>
         <br>
+        <!-- <label for="fileupload">Animal Image (Optional):</label><br>
+        <input type="file" name="file" id="fileupload" accept="image/*">
+  -->
 
         <!-- submit! -->
         <button type = "submit">Add New Pet</button>
     </form>
 
-    <form action="upload.php" method="post" enctype="multipart/form-data">
-        Select image to upload:
-        <input type="file" name="fileToUpload" id="fileupload">
-        <input type="submit" value="Upload Image" name="submit">
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" id="fileupload" accept="image/*">
+         <button type = "submit">upPet</button>
     </form>
 </body>
 
 
-<script>
-    //make sure to load before getting data
+<script type = "module">
+    import { addAnimal } from "/js/adminAddHandlers.js";
+
+    const img_form = document.getElementById('uploadForm');
+    const status = document.getElementById('status');
+
+    img_form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // prevent page reload
+
+        const fileInput = document.getElementById('fileupload');
+        if (!fileInput.files.length) {
+            status.textContent = 'Please select a file.';
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        try {
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const text = await response.text();
+            status.textContent = text;
+        } catch (err) {
+            console.error(err);
+            status.textContent = 'Upload failed.';
+        }
+    });
+
+
+
     document.addEventListener('DOMContentLoaded', () => {
         try {
+
+            let newData
             //making sure that we don't try to getelementbyid until after the user clicks submit
             const form = document.getElementById('animalForm');
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
+                console.log('Processing animal data...');
+                //handling (potential) image
+                const file = document.getElementById('fileupload').files[0];
+
+                let imageUploadResult = { success: true, filename: null, url: null };
+
+                // Only upload if a file is selected
+                if (file) {
+                    imageUploadResult = await uploadImage(file);
+                    console.log(imageUploadResult);
+                    
+                    if (!imageUploadResult.success) {
+                        console.log("error uploading image");
+                    }
+                }
                 // fields
                 const fields = ["animal", "name", "agegroup", "gender", "infoster", "intakedate", "activitylevel", "size", "age", "description", "goodwith", "personality", "health", "breed", "weight", "hypoallergenic", "fixed"];
-  
+
                 newData = {}
                 for (let i = 0; i < fields.length; i++) {
                     const field = fields[i];
@@ -143,8 +198,13 @@
                     } catch (e) {}
                 }
 
+                //add image name
+                if (imageUploadResult.filename) {
+                    newData['image_url'] = imageUploadResult.filename; 
+                } 
+
                 addAnimal(newData);
-                 
+                    
             });
         
         } catch (err) {
@@ -155,4 +215,4 @@
 
 </script>
 
-  
+

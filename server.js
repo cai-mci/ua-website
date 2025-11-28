@@ -3,6 +3,8 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 const app = express();
+
+const multer  = require('multer');//for image uploads
 const port = 3000;
 
 app.use(express.json());
@@ -34,10 +36,30 @@ app.use('/animals', animalEditsRouter);
 
 
 
-app.use((req, res) => {
-    res.status(404).send("404 Not Found");
+
+//image uploading
+
+// Set up multer for file storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/animal/'); // folder to save files
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // unique filename
+  }
 });
+const upload = multer({ storage: storage });
+
+
+// Handle file upload
+app.post('/upload', upload.single('file'), (req, res) => {
+  if (!req.file) return res.send('No file uploaded!');
+  res.send(`File uploaded successfully: ${req.file.filename}`);
+});
+
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
+
+
