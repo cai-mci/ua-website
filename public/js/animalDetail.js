@@ -2,7 +2,7 @@ import { getImageSrc, labeledRow } from "./utils.js";
 
 //detail functions
 
-async function loadAnimal(id) {
+export async function loadAnimal(id) {
   try {
     const response = await fetch(`/view/animal/${id}`);
 

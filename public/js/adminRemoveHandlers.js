@@ -1,5 +1,5 @@
 import { loadAnimalsFromAPI } from './adminHandlers.js';
-
+import { loadAnimal } from "./animalDetail.js";
 
 async function adoptAnimal(id) {
     const url = "/"+ id + "/adopt"
@@ -44,7 +44,7 @@ export async function loadAndShow() {
 
         const listBox = document.getElementById("animal-list");
         if (listBox) {
-            listBox.innerHTML = `<p class="error p-2">Failed to load data</p>`;
+            listBox.innerHTML = `<p class="error p-2">Failed to load animal</p>`;
         }
     }
     return animals;
@@ -52,11 +52,11 @@ export async function loadAndShow() {
 
 }
 
-function showAnimalList(dataToShow) {
+function showAnimalList(animalToShow) {
   const listBox = document.getElementById("animal-list");
   listBox.innerHTML = "";
 
-  dataToShow.forEach((animal) => {
+  animalToShow.forEach((animal) => {
     const box = document.createElement("div");
     box.className = "animal-list-item";
     box.innerHTML = `
@@ -70,7 +70,7 @@ function showAnimalList(dataToShow) {
         .forEach((i) => i.classList.remove("selected"));
       box.classList.add("selected");
 
-      selectedAnimalId = animal.id;
+      const selectedAnimalId = animal.id;
 
       // update modal text
       const modalName = document.getElementById("modal-animal-name");
@@ -84,4 +84,37 @@ function showAnimalList(dataToShow) {
 
     listBox.appendChild(box);
   });
+}
+
+// preview card
+async function loadPreview(id) {
+  const container = document.getElementById("animal-detail-container");
+  if (!container) {
+    console.log("couldn't find container")
+    return;
+  }
+  //get animal 
+  const animal = await loadAnimal(id);
+  //error handing!!
+  if (!animal) {
+    console.log("error :(")
+  }
+
+  const default_img = "/animal/" + animal.animal + ".png";
+  const imgSrc = animal.image_url && animal.image_url.trim()
+    ? animal.image_url
+    : default_img;
+
+
+  container.innerHTML = `
+    <div class="animal-detail">
+      <img src="${imgSrc}" alt=${animal.name ||  "No Name"} class="detail-image">
+      <h3>${animal.name || "No Name"}</h3>
+      <p><strong>Type:</strong> ${animal.animal || ""}</p>
+      <p><strong>Age:</strong> ${animal.age || animal.agegroup || ""}</p>
+      <p><strong>Gender:</strong> ${animal.gender || ""}</p>
+      <p><strong>Activity Level:</strong> ${animal.activitylevel || animal.activity_level || ""}</p>
+      <p><strong>Description:</strong> ${animal.description || ""}</p>
+    </div>
+  `;
 }

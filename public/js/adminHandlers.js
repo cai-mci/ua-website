@@ -1,4 +1,3 @@
-
 export async function loadAnimalsFromAPI() {
   const response = await fetch('/view/animals'); 
 
@@ -10,6 +9,9 @@ export async function loadAnimalsFromAPI() {
   const data = responseData.data;
   return data;
 }
+
+
+
 
 
 

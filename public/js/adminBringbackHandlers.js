@@ -1,6 +1,3 @@
-
-
-
 //perm delete / bring back page
 async function permanantelyDelete(id) {
     const url = "/"+ id;
