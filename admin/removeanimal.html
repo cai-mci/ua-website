@@ -2,8 +2,7 @@
   <title> Admin View </title>
   <link rel="stylesheet" href="/styles.css">
   <!-- including the js functions we made to query the db -->
-  <script src="js/animalEditing.js"></script>
-  <script src="js/animalLoading.js"></script>
+  <script src="/js/adminHandlers.js"></script>
 </head>
 <body class="delete-page">
   <div class="nav">
@@ -30,16 +29,7 @@
 
     <div class="button-row">
       <button type="button" class="delete-button" onclick="showModal()">Delete</button>
-      <button type="button" id="undo-button" class="undo-button" disabled>
-        Restore Last Removed Animal
-      </button>
     </div>
-    <div class="recently-deleted">
-  <h3>Recently Removed</h3>
-  <h5>Click on a recently removed animal to restore it.</h5>
-  <div id="recently-deleted-list">
-  </div>
-</div>
   </div>
 
   
@@ -58,282 +48,78 @@
  
 <script>
 
-let allAnimals = [];
-let selectedAnimalId = null;
-let lastDeletedAnimal = null;
+
+// let allAnimals = [];
+// let selectedAnimalId = null;
 
 // -page load
 document.addEventListener("DOMContentLoaded", () => {
-  loadAnimals();
-  loadRecentlyDeleted();
+  loadAnimalList();
   setUpSearch();
   setUpDeleteButtons();
-
-  const undoBtn = document.getElementById("undo-button");
-  if (undoBtn) {
-    undoBtn.addEventListener("click", undoLastDelete);
-  }
 });
 
-// left list
-async function loadAnimals() {
-  const listBox = document.getElementById("animal-list");
-  listBox.innerHTML = "<p>Loading...</p>";
 
-  allAnimals = data || [];
-  showAnimalList(allAnimals);
-}
 
-function showAnimalList(dataToShow) {
-  const listBox = document.getElementById("animal-list");
-  listBox.innerHTML = "";
 
-  dataToShow.forEach((animal) => {
-    const box = document.createElement("div");
-    box.className = "animal-list-item";
-    box.innerHTML = `
-      <span class="animal-id">${animal.id}</span>
-      <span class="animal-name">${animal.name || "(no name)"}</span>
-    `;
 
-    box.addEventListener("click", () => {
-      // highlight selected
-      document.querySelectorAll(".animal-list-item")
-        .forEach((i) => i.classList.remove("selected"));
-      box.classList.add("selected");
+// // preview card
+// async function loadPreview(id) {
+//   const container = document.getElementById("animal-detail-container");
+//   if (!container) {
+//     console.log("couldn't find container")
+//     return;
+//   }
+//   //get animal 
+//   const animal = await loadAnimal(id);
+//   //error handing!!
+//   if (!animal) {
+//     console.log("error :(")
+//   }
 
-      selectedAnimalId = animal.id;
+//   const default_img = "animal/" + animal.animal + ".png";
+//   const imgSrc = animal.image_url && animal.image_url.trim()
+//     ? animal.image_url
+//     : default_img;
 
-      // update modal text
-      const modalName = document.getElementById("modal-animal-name");
-      if (modalName) {
-        modalName.textContent = animal.name || ("Animal " + animal.id);
-      }
+//   const name = data.name || "No Name";
 
-      // load details on the right
-      loadPreview(animal.id);
-    });
+//   container.innerHTML = `
+//     <div class="animal-detail">
+//       <img src="${imgSrc}" alt=${data.name ||  "No Name"} class="detail-image">
+//       <h3>${data.name || "No Name"}</h3>
+//       <p><strong>Type:</strong> ${data.animal || ""}</p>
+//       <p><strong>Age:</strong> ${data.age || data.agegroup || ""}</p>
+//       <p><strong>Gender:</strong> ${data.gender || ""}</p>
+//       <p><strong>Activity Level:</strong> ${data.activitylevel || data.activity_level || ""}</p>
+//       <p><strong>Description:</strong> ${data.description || ""}</p>
+//     </div>
+//   `;
+// }
 
-    listBox.appendChild(box);
-  });
-}
 
-// preceiw cxard
-async function loadPreview(id) {
-  const container = document.getElementById("animal-detail-container");
-  if (!container) return;
+// // DELETE AND MODEA;
+// function setUpDeleteButtons() {
+//   const confirmBtn = document.getElementById("confirm-delete");
+//   if (confirmBtn) {
+//     confirmBtn.addEventListener("click", deleteAnimal);
+//   }
+// }
 
-  const { data, error } = await supabaseClient
-    .from("animals")
-    .select("*")
-    .eq("id", id)
-    .single();
 
-  if (error) {
-    console.error(error);
-    container.innerHTML = "<p>Error loading details.</p>";
-    return;
-  }
+// function showModal() {
+//   if (!selectedAnimalId) {
+//     alert("Please click an animal on the left first.");
+//     return;
+//   }
+//   document.getElementById("delete-modal").style.display = "flex";
+// }
+// window.showModal = showModal;
 
-  const imgSrc = data.image_url && data.image_url.trim()
-    ? data.image_url
-    : "img/default.jpg";
-
-  const name = data.name || "Adoptable Animal";
-
-  container.innerHTML = `
-    <div class="animal-detail">
-      <img src="${imgSrc}" alt="${name}" class="detail-image">
-      <h3>${name}</h3>
-      <p><strong>Type:</strong> ${data.animal || ""}</p>
-      <p><strong>Age:</strong> ${data.age || data.agegroup || ""}</p>
-      <p><strong>Gender:</strong> ${data.gender || ""}</p>
-      <p><strong>Activity Level:</strong> ${data.activitylevel || data.activity_level || ""}</p>
-      <p><strong>Description:</strong> ${data.description || ""}</p>
-    </div>
-  `;
-}
-
-// --SEARCH
-function setUpSearch() {
-  const searchInput = document.getElementById("search-input");
-  searchInput.addEventListener("input", () => {
-    const q = searchInput.value.toLowerCase();
-    const filtered = allAnimals.filter((animal) => {
-      const idStr = String(animal.id);
-      const nameStr = (animal.name || "").toLowerCase();
-      return idStr.includes(q) || nameStr.includes(q);
-    });
-    showAnimalList(filtered);
-  });
-}
-
-// DELETE AND MODEA;
-function setUpDeleteButtons() {
-  const confirmBtn = document.getElementById("confirm-delete");
-  if (confirmBtn) {
-    confirmBtn.addEventListener("click", deleteAnimal);
-  }
-}
-
-function showModal() {
-  if (!selectedAnimalId) {
-    alert("Please click an animal on the left first.");
-    return;
-  }
-  document.getElementById("delete-modal").style.display = "flex";
-}
-window.showModal = showModal;
-
-function hideModal() {
-  document.getElementById("delete-modal").style.display = "none";
-}
-window.hideModal = hideModal;
-
-// 
-async function deleteAnimal() {
-  if (!selectedAnimalId) {
-    alert("No animal selected.");
-    hideModal();
-    return;
-  }
-
-  const { data, error: fetchError } = await supabaseClient
-    .from("animals")
-    .select("*")
-    .eq("id", selectedAnimalId)
-    .single();
-
-  if (fetchError) {
-    console.error(fetchError);
-    alert("Error fetching animal before delete.");
-    hideModal();
-    return;
-  }
-
-  lastDeletedAnimal = data;
-  const { error: updateError } = await supabaseClient
-    .from("animals")
-    .update({ deleted_at: new Date().toISOString() })
-    .eq("id", selectedAnimalId);
-
-  if (updateError) {
-    console.error(updateError);
-    alert("Error deleting animal.");
-    hideModal();
-    return;
-  }
-
-  alert("Animal deleted.");
-  hideModal();
-  selectedAnimalId = null;
-
-  document.getElementById("animal-detail-container").innerHTML =
-    "<p>Select an animal on the left to see its details.</p>";
-
-  // refresh lists
-  loadAnimals();
-  loadRecentlyDeleted();
-
-  // enable undo button
-  const undoBtn = document.getElementById("undo-button");
-  if (undoBtn) undoBtn.disabled = false;
-}
-
-// RECENTLY DELETED LISGT
-async function loadRecentlyDeleted() {
-  const list = document.getElementById("recently-deleted-list");
-  if (!list) return;
-
-  list.innerHTML = "<p>Loading...</p>";
-
-  const { data, error } = await supabaseClient
-    .from("animals")
-    .select("id, name, deleted_at")
-    .not("deleted_at", "is", null)
-    .order("deleted_at", { ascending: false })
-    .limit(10);
-
-  if (error) {
-    console.error(error);
-    list.innerHTML = "<p>Error loading history.</p>";
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    list.innerHTML = "<p>No animals have been removed yet.</p>";
-    return;
-  }
-
-    list.innerHTML = "";
-  data.forEach((animal) => {
-    const row = document.createElement("div");
-    row.className = "recent-item";
-    const when = new Date(animal.deleted_at).toLocaleString();
-    row.textContent = `${animal.name || "(no name)"} – removed ${when}`;
-
-    // Make this row clickable to restore THIS specific animal
-    row.addEventListener("click", () => {
-      restoreDeleted(animal.id);
-    });
-
-    list.appendChild(row);
-  });
-}
-
-//undoooo the last deletyew
-async function undoLastDelete() {
-  if (!lastDeletedAnimal) {
-    alert("There is nothing to restore.");
-    return;
-  }
-
-  const { error } = await supabaseClient
-    .from("animals")
-    .update({ deleted_at: null }) // un-delete
-    .eq("id", lastDeletedAnimal.id);
-
-  if (error) {
-    console.error(error);
-    alert("Error restoring animal.");
-    return;
-  }
-
-  alert("Animal restored.");
-
-  lastDeletedAnimal = null;
-
-  const undoBtn = document.getElementById("undo-button");
-  if (undoBtn) undoBtn.disabled = true;
-
-  loadAnimals();
-  loadRecentlyDeleted();
-}
-
-// Restore a specific animal from the rr list
-async function restoreDeleted(id) {
-  const { error } = await supabaseClient
-    .from("animals")
-    .update({ deleted_at: null })
-    .eq("id", id);
-
-  if (error) {
-    console.error(error);
-    alert("Error restoring that animal.");
-    return;
-  }
-  alert("Animal restored.");
-  if (lastDeletedAnimal && lastDeletedAnimal.id === id) {
-    lastDeletedAnimal = null;
-    const undoBtn = document.getElementById("undo-button");
-    if (undoBtn) undoBtn.disabled = true;
-  }
-
-  // Refresh lists
-  loadAnimals();
-  loadRecentlyDeleted();
-}
-
+// function hideModal() {
+//   document.getElementById("delete-modal").style.display = "none";
+// }
+// window.hideModal = hideModal;
 
 </script>
 

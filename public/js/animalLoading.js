@@ -4,34 +4,45 @@ function buildDetailHref(id) {
     return "animaldetail.html?id=" + encodeURIComponent(String(id));
 }  
 
-
-async function loadAnimals() {
-  const tiles = document.getElementById("tiles");
-    if (!tiles) return; // Stop if the tile container is missing
-    tiles.innerHTML = "<p>Loading…</p>"; // Show loading message
-
-    let data;
+async function loadAndFilterAnimals() {
+    const tiles = document.getElementById("tiles");
+    if (!tiles) return; 
+    
+    tiles.innerHTML = "<p>Loading…</p>"; 
+    
+    let allAnimals;
     try {
-        const response = await fetch('/view/animals'); 
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        
-        responseData = await response.json();
-        data = responseData.data 
-
+        allAnimals = await loadAnimalsFromAPI();
     } catch (fetchError) {
         console.error("Fetch error:", fetchError);
         tiles.innerHTML = `<p class="error">Could not load animals. Check the server is running.</p>`;
         return;
     }
 
-  //Get current filter settings
-  const ui = getFilters();
-  
-  // ffilter the data using the passesFilters function
-  const filtered = (data || []).filter((rec) => passesFilters(rec, ui));
+    const ui = getFilters();
+    
+    const filteredAnimals = allAnimals.filter((rec) => passesFilters(rec, ui));
+
+    renderAnimalTiles(filteredAnimals);
+}
+
+
+async function loadAnimalsFromAPI() {
+  const response = await fetch('/view/animals'); 
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  responseData = await response.json();
+  data = responseData.data 
+  return data;
+}
+
+async function renderAnimalTiles(filtered) {
+  const tiles = document.getElementById("tiles");
+  if (!tiles) return; // Stop if the tile container is missing
+  tiles.innerHTML = "<p>Loading…</p>"; // Show loading message
 
   //  Handle no results
   tiles.innerHTML = "";
@@ -123,7 +134,7 @@ function getFilters() {
 function attachFilterListeners() {
   ["Animal", "Age", "Activity-Level", "Gender"].forEach((id) => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener("change", () => loadAnimals());
+    if (el) el.addEventListener("change", () => loadAnimalTiles());
   });
 }
 
