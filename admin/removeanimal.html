@@ -46,17 +46,17 @@
   </div>
  
 <script type="module">
-  import { loadAndShow } from '/js/adminRemoveHandlers.js';
+  import { loadAndShow, adoptAnimal, loadPreview, getSelectedID,setSelectedID } from '/js/adminRemoveHandlers.js';
         
   // let allAnimals = [];
-  // // let selectedAnimalId = null;
+  // let selectedAnimalId = null;
 
-  // // -page load
+  // -page load
   document.addEventListener("DOMContentLoaded", () => {
     loadAndShow();
     
     // setUpSearch();
-    // setUpDeleteButtons();
+    setUpDeleteButtons();
   });
 
 
@@ -64,32 +64,21 @@
 
 
 
+// DELETE AND MODEA;
+function setUpDeleteButtons() {
+  const confirmBtn = document.getElementById("confirm-delete");
+  if (confirmBtn) {
+    confirmBtn.addEventListener("click", async () => {
+      const selectedID = await getSelectedID();
+      await adoptAnimal(selectedID); 
+      setSelectedID(null);
+      loadAndShow();
+      loadPreview(-1);
+    });
+  }
+}
 
 
-
-
-// // DELETE AND MODEA;
-// function setUpDeleteButtons() {
-//   const confirmBtn = document.getElementById("confirm-delete");
-//   if (confirmBtn) {
-//     confirmBtn.addEventListener("click", deleteAnimal);
-//   }
-// }
-
-
-// function showModal() {
-//   if (!selectedAnimalId) {
-//     alert("Please click an animal on the left first.");
-//     return;
-//   }
-//   document.getElementById("delete-modal").style.display = "flex";
-// }
-// window.showModal = showModal;
-
-// function hideModal() {
-//   document.getElementById("delete-modal").style.display = "none";
-// }
-// window.hideModal = hideModal;
 
 </script>
 

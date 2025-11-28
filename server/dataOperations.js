@@ -43,9 +43,9 @@ async function deleteAnimal(id) {
 async function adoptAnimal(id) {
     const { data, error } = await supabase
         .from('animals')
-        .update('adoptable', false)
-        .eq('id', id)
-        .select();
+        .update({adoptable: false})
+        .select()
+        .eq('id', id);
 
     if (error) {
         console.error("Supabase Update Error:", error);
@@ -102,7 +102,7 @@ async function getAnimal(id) {
 
 //get all animals, take filters into account
 async function getAnimals(filters = {}) {
-    let query = supabase.from('animals').select();
+    let query = supabase.from('animals').select('*').order('id', {ascending: true});
 
     if (Object.keys(filters).length > 0) {
         query = query.match(filters); 

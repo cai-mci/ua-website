@@ -1,8 +1,20 @@
 import { loadAnimalsFromAPI } from './adminHandlers.js';
 import { loadAnimal } from "./animalDetail.js";
 
-async function adoptAnimal(id) {
-    const url = "/"+ id + "/adopt"
+
+let selectedAnimalId = null;
+
+
+export async function getSelectedID() {
+    return selectedAnimalId;
+}
+export async function setSelectedID(id) {
+    selectedAnimalId = id;
+}
+
+export async function adoptAnimal(id) {
+    const url = "/animals/"+ id + "/adopt"
+
     try {
         const response = await fetch(url, {
             method: 'PATCH',
@@ -14,12 +26,15 @@ async function adoptAnimal(id) {
         if (response.ok) {
             console.log("Animal modified successfully");
             alert("Animal is no longer listed on site");
-            loadAnimalsList();
+            loadAndShow();
 
+            hideModal();
             return true;
         } else {
             console.error("Server update error:", result.message || "Unknown error");
             alert('Error modifying animal.');
+            
+            hideModal();
             return false;
         }
 
@@ -28,6 +43,7 @@ async function adoptAnimal(id) {
         alert("Error: Could not reach the server.");
         return false;
     }
+
 }
 
 
@@ -70,7 +86,8 @@ function showAnimalList(animalToShow) {
         .forEach((i) => i.classList.remove("selected"));
       box.classList.add("selected");
 
-      const selectedAnimalId = animal.id;
+      console.log("selected: " , animal.id)
+      selectedAnimalId = animal.id;
 
       // update modal text
       const modalName = document.getElementById("modal-animal-name");
@@ -87,17 +104,30 @@ function showAnimalList(animalToShow) {
 }
 
 // preview card
-async function loadPreview(id) {
+export async function loadPreview(id) {
   const container = document.getElementById("animal-detail-container");
   if (!container) {
     console.log("couldn't find container")
     return;
   }
+
+  if (id == -1) {
+    container.innerHTML = `
+        <div id="animal-detail-container" class="animal-detail-card">
+        <p>Select an animal on the left to see its details.</p>
+        </div>
+    `;
+
+  }
   //get animal 
   const animal = await loadAnimal(id);
   //error handing!!
   if (!animal) {
-    console.log("error :(")
+    container.innerHTML = `
+        <div id="animal-detail-container" class="animal-detail-card">
+        <p>Select an animal on the left to see its details.</p>
+        </div>
+    `;
   }
 
   const default_img = "/animal/" + animal.animal + ".png";
@@ -118,3 +148,18 @@ async function loadPreview(id) {
     </div>
   `;
 }
+
+
+function showModal() {
+  if (!selectedAnimalId) {
+    alert("Please click an animal on the left first.");
+    return;
+  }
+  document.getElementById("delete-modal").style.display = "flex";
+}
+window.showModal = showModal;
+
+function hideModal() {
+  document.getElementById("delete-modal").style.display = "none";
+}
+window.hideModal = hideModal;

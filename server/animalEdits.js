@@ -39,6 +39,7 @@ router.patch('/:id/adopt', async (req, res) => {
     try {
         const id = req.params.id;
         const data = await adoptAnimal(id);
+
         res.status(200).json({ success: true, message: 'Animal marked as adopted.', data: data });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to update adoption status.', error: error.message });
