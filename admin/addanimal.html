@@ -1,12 +1,9 @@
 <header>
     <title> Admin View </title>
     <link rel="stylesheet" href="/styles.css">
-    <!-- including supabase -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.35.0/dist/umd/supabase.min.js" ></script> -->
-    <!-- including the js functions we made to query the db -->
-    <script src="js/animalEditing.js"></script>
+    <script src="/js/adminHandlers.js"></script>
+
 </header>
-<!-- test -->
 
 <body>
 
@@ -99,7 +96,7 @@
         <label for="personality">Personality:</label><br>
         <input type="text" id="personality" name="personality" placeholder="Pet's Personality">
         <br>
-        <label for="health">Age:</label><br>
+        <label for="health">Health:</label><br>
         <input type="text" id="health" name="health" placeholder="vaccine records, etc">
         <br>
         <label for="breed">Breed:</label><br>
@@ -126,12 +123,11 @@
         <input type="file" name="fileToUpload" id="fileupload">
         <input type="submit" value="Upload Image" name="submit">
     </form>
-
 </body>
 
 
 <script>
-        //make sure to load before getting data
+    //make sure to load before getting data
     document.addEventListener('DOMContentLoaded', () => {
         try {
             //making sure that we don't try to getelementbyid until after the user clicks submit
@@ -150,34 +146,14 @@
                     } catch (e) {}
                 }
 
-                console.log(newData)
-                //pass the data to the server as res
-                const res =  await fetch('/admin/addanimal', {
-                    method: 'Post',
-                    headers: {'Content-Type' : 'application/json'},
-                    body: JSON.stringify(newData)
-                });
-                const data = await res.json(); // parse JSON response
-
-                console.log("HTTP status:", res.status);
-                console.log("Server response body:", data);
-
-                if (res.status === 200) {
-                    alert('Animal added!');
-                    // form.reset();
-                } else {
-                    alert('Error Inserting');
-                }
+                addAnimal(newData);
                  
             });
         
         } catch (err) {
             console.log('didntwork')
             console.error(err);
-            // alert('Request failed');
         }
-
-
     });           
 
 </script>

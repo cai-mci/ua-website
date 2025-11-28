@@ -3,6 +3,7 @@
   <link rel="stylesheet" href="/styles.css">
   <!-- including the js functions we made to query the db -->
   <script src="js/animalEditing.js"></script>
+  <script src="js/animalLoading.js"></script>
 </head>
 <body class="delete-page">
   <div class="nav">
@@ -56,11 +57,6 @@
   </div>
  
 <script>
-const SUPABASE_URL = "https://pijsxjlqxeqanknogalx.supabase.co";
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpanN4amxxeGVxYW5rbm9nYWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1MTQ3MjUsImV4cCI6MjA3NzA5MDcyNX0.-UTF0fw7eBQZFlFK5H9FPy6FCiAwDBjj3oAM-lXfyEg";
-
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let allAnimals = [];
 let selectedAnimalId = null;
@@ -83,18 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadAnimals() {
   const listBox = document.getElementById("animal-list");
   listBox.innerHTML = "<p>Loading...</p>";
-
-  const { data, error } = await supabaseClient
-    .from("animals")
-    .select("id, name")
-    .is("deleted_at", null)// ONLY animals not deleted
-    .order("id", { ascending: true });
-
-  if (error) {
-    console.error(error);
-    listBox.innerHTML = "<p>Error loading animals</p>";
-    return;
-  }
 
   allAnimals = data || [];
   showAnimalList(allAnimals);

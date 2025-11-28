@@ -9,6 +9,9 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 //admin add new animal to db
 async function insertAnimal(animalData) {
+    //automatically make them adoptable
+    animalData['adoptable'] = true;
+
     const { data, error } = await supabase
         .from('animals')
         .insert([animalData])
