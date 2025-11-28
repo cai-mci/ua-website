@@ -3,17 +3,6 @@ function buildDetailHref(id) {
     return "animaldetail.html?id=" + encodeURIComponent(String(id));
 }  
 
-async function loadAnimalsFromAPI() {
-  const response = await fetch('/view/animals'); 
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
-  }
-
-  const responseData = await response.json();
-  const data = responseData.data 
-  return data;
-}
 
 async function loadAdoptableAnimalsFromAPI() {
   const response = await fetch('/view/animals/adoptable'); 
