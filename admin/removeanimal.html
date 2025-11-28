@@ -2,7 +2,6 @@
   <title> Admin View </title>
   <link rel="stylesheet" href="/styles.css">
   <!-- including the js functions we made to query the db -->
-  <script src="/js/adminHandlers.js"></script>
 </head>
 <body class="delete-page">
   <div class="nav">
@@ -46,19 +45,19 @@
     </div>
   </div>
  
-<script>
+<script type="module">
+  import { loadAndShow } from '/js/adminRemoveHandlers.js';
+        
+  // let allAnimals = [];
+  // // let selectedAnimalId = null;
 
-
-let allAnimals = [];
-// let selectedAnimalId = null;
-
-// -page load
-document.addEventListener("DOMContentLoaded", () => {
-  allAnimals = loadAndShow();
-  
-  // setUpSearch();
-  // setUpDeleteButtons();
-});
+  // // -page load
+  document.addEventListener("DOMContentLoaded", () => {
+    loadAndShow();
+    
+    // setUpSearch();
+    // setUpDeleteButtons();
+  });
 
 
 

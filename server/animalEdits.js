@@ -11,7 +11,7 @@ const { requireAdmin } = require('./requireAdmin.js');
 
 
 //create a new animal
-router.post('/', requireAdmin, async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const newAnimalData = req.body;
         const data = await insertAnimal(newAnimalData);
@@ -23,7 +23,7 @@ router.post('/', requireAdmin, async (req, res) => {
 });
 
 //permanantely delete an animal
-router.delete('/:id',requireAdmin, async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const id = req.params.id;
         await deleteAnimal(id); 
@@ -35,7 +35,7 @@ router.delete('/:id',requireAdmin, async (req, res) => {
 });
 
 //adopt (hide from main page) animal
-router.patch('/:id/adopt', requireAdmin, async (req, res) => {
+router.patch('/:id/adopt', async (req, res) => {
     try {
         const id = req.params.id;
         const data = await adoptAnimal(id);
@@ -46,7 +46,7 @@ router.patch('/:id/adopt', requireAdmin, async (req, res) => {
 });
 
 //bring back (show on main page) animal
-router.patch('/:id/bringback',requireAdmin, async (req, res) => {
+router.patch('/:id/bringback', async (req, res) => {
     try {
         const id = req.params.id;
         const data = await bringbackAnimal(id);
@@ -57,7 +57,7 @@ router.patch('/:id/bringback',requireAdmin, async (req, res) => {
 });
 
 //edit / update an animal
-router.put('/:id', requireAdmin,async (req, res) => {
+router.put('/:id',async (req, res) => {
     try {
         const id = req.params.id;
         const newData = req.body;
