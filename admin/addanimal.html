@@ -18,7 +18,7 @@
         <p>MESSAGE BOX</p>
     </div>
     <!-- add a new pet -->
-    <form id = "animalForm">
+    <form id = "animalForm" enctype="multipart/form-data">
         <p class = "form_header">Mandatory Fields</p>
         <label for="Name">Name:</label><br>
         <input type="text" id="name" name="name" placeholder="Pet's Name" required>
@@ -114,52 +114,25 @@
             <option value="Hypoallergenic">Hypoallergenic</option>
         </select>
         <br>
-        <!-- <label for="fileupload">Animal Image (Optional):</label><br>
+        <label for="file">File Upload:</label><br>
         <input type="file" name="file" id="fileupload" accept="image/*">
-  -->
 
         <!-- submit! -->
         <button type = "submit">Add New Pet</button>
     </form>
 
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="fileupload" accept="image/*">
+    <!-- <form action="/upload" method="post" >
          <button type = "submit">upPet</button>
-    </form>
+    </form> -->
 </body>
 
 
 <script type = "module">
-    import { addAnimal } from "/js/adminAddHandlers.js";
+    import { addAnimal, uploadImage } from "/js/adminAddHandlers.js";
 
     const img_form = document.getElementById('uploadForm');
     const status = document.getElementById('status');
 
-    img_form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // prevent page reload
-
-        const fileInput = document.getElementById('fileupload');
-        if (!fileInput.files.length) {
-            status.textContent = 'Please select a file.';
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('file', fileInput.files[0]);
-
-        try {
-            const response = await fetch('/upload', {
-                method: 'POST',
-                body: formData
-            });
-
-            const text = await response.text();
-            status.textContent = text;
-        } catch (err) {
-            console.error(err);
-            status.textContent = 'Upload failed.';
-        }
-    });
 
 
 
@@ -167,10 +140,12 @@
         try {
 
             let newData
-            //making sure that we don't try to getelementbyid until after the user clicks submit
+            
             const form = document.getElementById('animalForm');
+            
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
+
                 console.log('Processing animal data...');
                 //handling (potential) image
                 const file = document.getElementById('fileupload').files[0];
@@ -180,10 +155,12 @@
                 // Only upload if a file is selected
                 if (file) {
                     imageUploadResult = await uploadImage(file);
-                    console.log(imageUploadResult);
+                    console.log(imageUploadResult.filename);
                     
                     if (!imageUploadResult.success) {
                         console.log("error uploading image");
+                        alert('Failed to upload image. Please try again.');
+                        return;
                     }
                 }
                 // fields

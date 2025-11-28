@@ -41,11 +41,21 @@ async function displayAnimalDetails(id) {
     const goodwith = animal.goodwith || "";
     const description = animal.description || "";
 
-    const default_img = "/animal/" + animal.animal + ".png";
-    const imgSrc = animal.image_url && animal.image_url.trim()
-      ? animal.image_url
-      : default_img;
+    //image
+    const img = document.createElement("img");
+
+    const default_img = animal.animal + ".png";
+    const filename = animal.image_url ?? default_img;
+
+    img.src = "/animal/" + filename;
+
+    img.onerror = () => {
+      img.src = "/animal/" + default_img;
+    };
+
+
     container.innerHTML = `
+    
       <div class="detail-info">
         <h1>${name}</h1>
 
@@ -85,10 +95,13 @@ async function displayAnimalDetails(id) {
         </div>
       </div>
 
-      <div class="detail-photo">
-        <img src="${imgSrc}" alt="${name}">
-      </div>
     `;
+
+    // Append image separately so we can attach onerror
+    const photoContainer = document.createElement("div");
+    photoContainer.className = "detail-photo";
+    photoContainer.appendChild(img);
+    container.appendChild(photoContainer);
   } catch (err) {
     console.error("Detail render error:", err);
     container.innerHTML = `<p class="error">Could not render details.</p>`;
