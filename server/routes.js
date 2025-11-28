@@ -36,6 +36,7 @@ const requireAdmin = (req, res, next) => {
 router.get('/admin/home', (req, res) => serveAdminHtml('admin.html', req, res));
 router.get('/admin/add', (req, res) => serveAdminHtml('addanimal.html', req, res));
 router.get('/admin/remove', (req, res) => serveAdminHtml('removeanimal.html', req, res));
+router.get('/admin/recover', (req, res) => serveAdminHtml('recoveranimal.html', req, res));
 router.get('/admin/edit', (req, res) => serveAdminHtml('editanimal.html', req, res));
 
 

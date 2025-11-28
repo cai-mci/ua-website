@@ -58,7 +58,7 @@ async function adoptAnimal(id) {
 async function bringbackAnimal(id) {
     const { data, error } = await supabase
         .from('animals')
-        .update('adoptable', true)
+        .update({adoptable: true})
         .eq('id', id)
         .select(); 
 

@@ -1,0 +1,143 @@
+<head>
+  <title> Admin View </title>
+  <link rel="stylesheet" href="/styles.css">
+  <!-- including the js functions we made to query the db -->
+</head>
+<body class="delete-page">
+  <div class="nav">
+    <button class="back-button" onclick="window.location.href='/admin/home'">Back</button>
+  </div>
+  <div class="navspacer"></div>
+
+  <div class="edit-page">
+
+    <!-- left panel animal list -->
+    <div class="left-panel">
+
+      <label class="search-label">Search:</label>
+      <input id="search-input" class="search-box" type="text" placeholder="name of pet">
+      <!--insert animals-->
+      <div id="animal-list"></div>
+
+    </div>
+     <!-- right panel: preview + delete controls -->
+   <div class="right-panel">
+    <div id="animal-detail-container" class="animal-detail-card">
+      <p>Select an animal on the left to see its details.</p>
+    </div>
+
+    <div class="button-row">
+      <button type="button" class="delete-button" id="delete-button" >Permanently Delete</button>
+      <button type="button" class="submit-button" id ="recover-button">Recover</button>
+    </div>
+  </div>
+
+  
+
+  <!-- DELETE CONFIRM MODAL -->
+  <div id="delete-modal" class="modal-overlay">
+    <div class="modal-box">
+      <p>Are you sure you want to permanently delete <span id="delete-modal-name">this animal</span>?</p>
+
+      <div class="modal-buttons">
+        <button class="cancel-button" onclick="hideDeleteModal()">Cancel</button>
+        <button id="confirm-delete" class="confirm-button">Yes, Permanently Delete</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- RECOVER CONFIRM MODAL -->
+  <div id="recover-modal" class="modal-overlay">
+    <div class="modal-box">
+      <p>Recover <span id="recover-modal-name">this animal</span>?</p>
+
+      <div class="modal-buttons">
+        <button class="cancel-button" onclick="hideRecoverModal()">Cancel</button>
+        <button id="confirm-recover" class="confirm-button">Yes, Recover</button>
+      </div>
+    </div>
+  </div>
+
+
+ 
+<script type="module">
+  import { loadPreview, getSelectedID,setSelectedID } from '/js/adminRemoveHandlers.js';
+  import { loadAndShow, permanantelyDelete, bringbackAnimal } from '/js/adminBringBackHandlers.js';
+       
+  // let allAnimals = [];
+  // let selectedAnimalId = null;
+
+  // -page load
+  document.addEventListener("DOMContentLoaded", () => {
+    loadAndShow();
+    
+    // setUpSearch();
+    setUpActionButtons();
+  });
+
+  //modals
+  function showDeleteModal() {
+    const nameSpan = document.getElementById("delete-modal-name");
+    const detailCard = document.getElementById("animal-detail-container");
+    const name = detailCard.dataset.animalName || "this animal";
+    nameSpan.textContent = name;
+
+    document.getElementById("delete-modal").style.display = "block";
+  }
+
+  function hideDeleteModal() {
+    document.getElementById("delete-modal").style.display = "none";
+  }
+
+  function showRecoverModal() {
+    const nameSpan = document.getElementById("recover-modal-name");
+    const detailCard = document.getElementById("animal-detail-container");
+    const name = detailCard.dataset.animalName || "this animal";
+    nameSpan.textContent = name;
+
+    document.getElementById("recover-modal").style.display = "block";
+  }
+
+  function hideRecoverModal() {
+    document.getElementById("recover-modal").style.display = "none";
+  }
+
+  // --- CONFIRM ACTION BUTTONS ---
+  function setUpActionButtons() {
+    const deleteModalBtn = document.getElementById("delete-button");
+    const recoverModalBtn = document.getElementById("recover-button");
+
+    deleteModalBtn?.addEventListener("click", showDeleteModal);
+    recoverModalBtn?.addEventListener("click", showRecoverModal);
+
+
+    const deleteBtn = document.getElementById("confirm-delete");
+    const recoverBtn = document.getElementById("confirm-recover");
+
+
+    deleteBtn.addEventListener("click", async () => {
+      console.log("deleting");
+      const selectedID = await getSelectedID();
+      await permanantelyDelete(selectedID);
+      hideDeleteModal();
+      setSelectedID(null);
+      loadAndShow();
+      loadPreview(-1);
+    });
+
+    recoverBtn.addEventListener("click", async () => {
+      const selectedID = await getSelectedID();
+      await bringbackAnimal(selectedID);
+      hideRecoverModal();
+      setSelectedID(null);
+      loadAndShow();
+      loadPreview(-1);
+    });
+  }
+  
+
+</script>
+
+</body> 
+
+ 

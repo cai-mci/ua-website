@@ -68,7 +68,7 @@ export async function loadAndShow() {
 
 }
 
-function showAnimalList(animalToShow) {
+export function showAnimalList(animalToShow) {
   const listBox = document.getElementById("animal-list");
   listBox.innerHTML = "";
 
