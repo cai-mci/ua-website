@@ -92,7 +92,7 @@ async function getAnimal(id) {
         .eq('id', id)
         .single(); 
 
-    if (error) {
+    if (error && (error.code != 'PGRST116')) {
         console.error("Supabase Select Error:", error);
         throw error;
     }
@@ -128,7 +128,7 @@ async function getUser(username) {
         .eq('username', username)
         .single(); 
 
-    if (error) {
+    if (error && (error.code != 'PGRST116')) {
         console.error("Supabase Select Error:", error);
         throw error;
     }
