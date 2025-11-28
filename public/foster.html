@@ -6,9 +6,8 @@
   <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adoptable Animals</title>
+  <title>Foster</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="js/animalLoading.js" defer></script>
 
 
 </head>
@@ -83,11 +82,11 @@
 
   <div class="row" id="tiles"></div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (typeof attachFilterListeners === "function") attachFilterListeners();
-      if (typeof loadAnimals === "function") loadAnimals();
-    });
-  </script>
+    <script type="module">
+        import { loadAndFilterAnimals, attachFilterListeners } from './js/animalLoading.js';
+        
+        attachFilterListeners();
+        loadAndFilterAnimals();
+    </script>
 </body>
 

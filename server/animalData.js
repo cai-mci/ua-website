@@ -17,6 +17,17 @@ router.get('/animals', async (req, res) => {
     }
 });
 
+router.get('/animals/adoptable', async (req, res) => { 
+    try {
+        const data = await getAnimals({'adoptable': true});
+
+        res.status(200).json({ success: true, count: data.length, data: data });
+    } catch (error) {
+        console.error('API Fetch Error:', error);
+        res.status(500).json({ error: 'Failed to fetch animals from database.' });
+    }
+});
+
 
 
 //animal details page: get a single animal by id

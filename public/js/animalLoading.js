@@ -15,6 +15,18 @@ async function loadAnimalsFromAPI() {
   return data;
 }
 
+async function loadAdoptableAnimalsFromAPI() {
+  const response = await fetch('/view/animals/adoptable'); 
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const responseData = await response.json();
+  const data = responseData.data 
+  return data;
+}
+
 
 export async function loadAndFilterAnimals() {
   console.log("loading and filtering")
@@ -27,7 +39,7 @@ export async function loadAndFilterAnimals() {
   
   let allAnimals;
   try {
-      allAnimals = await loadAnimalsFromAPI();
+      allAnimals = await loadAdoptableAnimalsFromAPI();
   } catch (fetchError) {
       console.error("Fetch error:", fetchError);
       tiles.innerHTML = `<p class="error">Could not load animals. Check the server is running.</p>`;
@@ -122,6 +134,15 @@ function onImgError(e) {
 
 //user interface filters (values from dropdowns)
 function passesFilters(rec, ui) {
+  //checking foster or adopt
+  const path = window.location.pathname.toLowerCase();
+  if (path.includes('/foster')) {
+        if (rec?.infoster === 'In Foster') {
+            return false;
+        }
+    }
+
+
   if (ui.species.toLowerCase()  && rec?.animal.toLowerCase()    !== ui.species)   return false;
   if (ui.age.toLowerCase()      && rec?.agegroup.toLowerCase()          !== ui.age)       return false;
   if (ui.activity.toLowerCase() && rec?.activitylevel.toLowerCase()     !== ui.activity)  return false;
@@ -146,4 +167,5 @@ export function attachFilterListeners() {
     if (el) el.addEventListener("change", () => loadAndFilterAnimals());
   });
 }
+
 
