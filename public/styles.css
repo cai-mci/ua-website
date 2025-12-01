@@ -1,5 +1,5 @@
 /* used in all */
-
+/* 
 :root {
     --bg_color: rgb(255, 255, 255);
     --light_text_color: white;
@@ -8,6 +8,21 @@
     --lightgrey: rgb(243, 244, 246);
     --accent1: rgb(171, 171, 171);
     --hover: rgb(148, 144, 144);
+    --shadow: rgba(0, 0, 0, 0.2);
+} */
+
+/* blue */
+
+:root {
+    --bg_color: rgb(225, 224, 249);
+    --light_text_color: rgb(237, 233, 252);
+    --dark_text_color: rgb(21, 13, 49);
+    --dark: rgb(48, 28, 113);
+    --lightgrey: rgb(222, 214, 250);
+    --accent1: rgb(161, 146, 210);
+    --hover: rgb(98, 79, 159);
+    --shadow: rgba(0, 0, 0, 0.2);
+    --overlay: rgba(200, 208, 255, 0.4);
 }
 
 html,
@@ -19,7 +34,7 @@ body {
 }
 
 .navspacer {
-    height: 80px
+    height: 100px
 }
 
 
@@ -63,9 +78,13 @@ body {
 
 h1 {
     text-align: center;
+    color:var(--hover)
 }
 
 /* nav bar */
+
+/* Top nav bar */
+
 
 .nav {
     display: flex;
@@ -76,6 +95,8 @@ h1 {
     /* push links to the right */
 
     position: fixed;
+    padding: 15px;
+    display: flex;
     height: 70px;
     width: 100%;
     z-index: 100;
@@ -90,13 +111,13 @@ h1 {
     display: flex;
     justify-content: flex-end;
     gap: 20px;
-    padding: 10px;
+    padding: 20px;
 }
 
 .nav-links a {
     margin: 0 auto;
     text-decoration: none;
-    color: var(--dark);
+    color: var(--light_text_color);
     width: 50px;
 }
 
@@ -162,7 +183,7 @@ h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.4);
+    background: var(--overlay);
     z-index: 0;
     opacity: 80%;
 }
@@ -325,8 +346,8 @@ h1 {
 /* adopt page */
 
 .animal {
-    border-radius: 6%;
-    border: 1px solid black;
+    border-radius: 20px;
+    border: 1px solid var(--dark_text_color);
     width: 150px;
     display: flex;
     flex-wrap: wrap;
@@ -334,7 +355,10 @@ h1 {
     align-items: center;
     margin: 2%;
     padding: 1%;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    box-shadow: 2px 2px 5px var(--shadow);
+    text-decoration: none;
+    color: var(--dark);
+    background-color: var(--light_text_color);
 }
 
 
@@ -370,19 +394,19 @@ h1 {
     border-radius: 8px;
     font-size: 14px;
     outline: none;
-    background-color: var(--bg_color);
+    background-color: var(--light_text_color);
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .filter-controls select:hover {
     border-color: var(--hover);
     /* blue border on hover */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 6px var(--shadow);
 }
 
 .filter-controls select:focus {
     border-color: var(--hover);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
 }
 
 .admin-container {
@@ -392,25 +416,11 @@ h1 {
     padding: 0;
     background: var(--form-bg);
     border-radius: 8px;
-    /* Soft shadow to lift the container off the background */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/*edit an animal page*/
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-}
 
-/* Top nav bar */
-.nav {
-    background: #a8a8a8;
-    color: white;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-}
+
 
 .nav h1 {
     margin: 0 auto;
@@ -450,11 +460,11 @@ body {
 }
 
 .animal-list-item {
-    background: white;
+    background: var(--light_text_color);
     padding: 12px;
     margin-bottom: 10px;
     border-radius: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--hover);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -462,11 +472,11 @@ body {
 }
 
 .animal-list-item:hover {
-    background: #eee;
+    background: var(--accent1);
 }
 
 .animal-list-item.selected {
-    background: #c9c9c9;
+    background: var(--hover);
 }
 
 .animal-id {
@@ -475,12 +485,18 @@ body {
     width: 30px;
 }
 
-.right-panel {
+.right-panel, .add-form {
     flex: 1;
-    background: white;
+    background: var(--accent1);
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0px 0px 10px #cccccc;
+    box-shadow: 0px 0px 10px var(--shadow);
+    color: var(--dark_text_color);
+}
+
+.add-form{
+    margin: 20px;
+    background: var(--light_text_color);
 }
 
 .tabs {
@@ -489,18 +505,21 @@ body {
     margin-bottom: 20px;
 }
 
-.tab-button {
-    padding: 12px 20px;
+.tab-button.active {
+    background: var(--light_text_color);
+    color: var(--dark);
     border: none;
-    background: #dddddd;
+}
+
+.tab-button {
+    border: none;
+    padding: 12px 20px;
     border-radius: 8px 8px 0 0;
     cursor: pointer;
     font-weight: bold;
-}
-
-.tab-button.active {
-    background: white;
-    border-bottom: 3px solid black;
+    background: var(--hover);
+    color: var(--light_text_color);
+    border-bottom: 3px solid var(--dark_text_color);
 }
 
 /* form content */
@@ -531,7 +550,7 @@ form select {
     padding: 10px;
     margin-top: 6px;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--light_text_color);
 }
 
 .button-row {
@@ -541,27 +560,34 @@ form select {
 }
 
 .delete-button {
-    background: red;
-    color: white;
+    background: var(--hover);
+    color: var(--light_text_color);
     padding: 10px 16px;
     border-radius: 8px;
     border: none;
+}
+
+.delete-button:hover {
+    background: red;
 }
 
 .submit-button {
-    background: #2ecc71;
-    color: white;
+    background: var(--bg_color);
+    color: var(--dark_text_color);
     padding: 10px 16px;
     border-radius: 8px;
     border: none;
 }
-
+.submit-button:hover {
+    background: var(--hover);
+    color: var(--light_text_color);
+}
 
 .modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: var(--shadow);
     justify-content: center;
     align-items: center;
 }

@@ -18,102 +18,104 @@
         <p>MESSAGE BOX</p>
     </div>
     <!-- add a new pet -->
-    <form id = "animalForm" enctype="multipart/form-data">
-        <p class = "form_header">Mandatory Fields</p>
-        <label for="Name">Name:</label><br>
-        <input type="text" id="name" name="name" placeholder="Pet's Name" required>
-        <br>
-        <label for="Age">Age Group:</label><br>
- 
-        <select id="agegroup" required>
-            <option value = "" disabled selected>Select age group</option>
-            <option value="Baby">Baby</option>
-            <option value="Young">Young</option>
-            <option value="Aduly">Adult</option>
-            <option value="Elderly">Elderly</option>
-        </select>
-        <br>
-
-        <label for="Gender">Gender:</label><br>
-        <select id="gender" required>
-            <option value = "" disabled selected>Select gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-        <br>
-
-        <label for="ActivityLevel">Activity Level:</label><br>
-        <select id="activitylevel" required>
-            <option value = "" disabled selected>Select activity level</option>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select>
-        <br>
-        <label for="Animal">Type:</label><br>
-        <select id="animal" required>
-            <option value = "" disabled selected>Select animal type</option>
-            <option value="Dog">Dog</option>
-            <option value="Cat">Cat</option>
-            <option value="Other">Other</option>
-        </select>
-        <br>
-        <label for="InFoster">Foster:</label><br>
-        <select id="infoster" required>
-            <option value = "" disabled selected>Select foster status</option>
-            <option value="In Foster">In Foster</option>
-            <option value="Not in Foster">Not in Foster</option>
-        </select>
-        <br>
-        <label for="IntakeDate">Intake Date:</label><br>
-        <input type="date" id="intakedate" name="IntakeDate">
-        <br>
-        <label for="Size">Size:</label><br>
-        <select id="size" required>
-            <option value = "" disabled selected>Select size</option>
-            <option value="Small">Small</option>
-            <option value="Medium">Medium</option>
-            <option value="Large">Large</option>
-        </select>
-        <br>
+    <form id = "animalForm" class = "add-form" enctype="multipart/form-data">
+        <div class="form-row">
+            <div class = "form-column">
+                <p class = "form_header">Mandatory Fields</p>
+                <label for="Name">Name:</label><br>
+                <input type="text" id="name" name="name" placeholder="Pet's Name" required>
+                <br>
+                <label for="Age">Age Group:</label><br>
         
-        <p class = "form_header">Optional Fields</p>
+                <select id="agegroup" required>
+                    <option value = "" disabled selected>Select age group</option>
+                    <option value="Baby">Baby</option>
+                    <option value="Young">Young</option>
+                    <option value="Aduly">Adult</option>
+                    <option value="Elderly">Elderly</option>
+                </select>
+                
+                
+                <label for="Gender">Gender:</label><br>
+                <select id="gender" required>
+                    <option value = "" disabled selected>Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                
+                <label for="Animal">Type:</label><br>
+                <select id="animal" required>
+                    <option value = "" disabled selected>Select animal type</option>
+                    <option value="Dog">Dog</option>
+                    <option value="Cat">Cat</option>
+                    <option value="Other">Other</option>
+                </select>
 
-        <label for="age">Age:</label><br>
-        <input type="text" id="age" name="age" placeholder="Pet's Age">
-        <br>
-        <label for="fixed">Fixed:</label><br>
-        <select id="fixed">
-            <option value="">Select an option</option>
-            <option value="UnFixed">Unfixed</option>
-            <option value="Fixed">Fixed</option>
-        </select>
-        <br>
+                <label for="InFoster">Foster:</label><br>
+                <select id="infoster" required>
+                    <option value = "" disabled selected>Select foster status</option>
+                    <option value="In Foster">In Foster</option>
+                    <option value="Not in Foster">Not in Foster</option>
+                </select>
+                <label for="IntakeDate">Intake Date:</label><br>
+                <input type="date" id="intakedate" name="IntakeDate">
+                <br>
+                <label for="Size">Size:</label><br>
+                <select id="size" required>
+                    <option value = "" disabled selected>Select size</option>
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                </select>
 
-        <!-- TODO: make this check boxes -->
-        <label for="goodwith">Good With:</label><br>
-        <input type="text" id="goodwith" name="goodwith" placeholder="Kids, Cats, etc">
-        <br>
-        <label for="personality">Personality:</label><br>
-        <input type="text" id="personality" name="personality" placeholder="Pet's Personality">
-        <br>
-        <label for="health">Health:</label><br>
-        <input type="text" id="health" name="health" placeholder="vaccine records, etc">
-        <br>
-        <label for="breed">Breed:</label><br>
-        <input type="text" id="breed" name="breed" placeholder="Pet's Breed">
-        <br>
-        <label for="weight">Weight:</label><br>
-        <input type="text" id="weight" name="weight" placeholder="Pet's Weight">
-        <br>
+            </div>
+            <div class = "form-column">
+                <p class = "form_header">Optional Fields</p>
 
-        <label for="hypoallergenic">Hypoallergenic:</label><br>
-        <select id="hypoallergenic">
-            <option value="">Select an option</option>
-            <option value="Not Hypoallergenic">Not Hypoallergenic</option>
-            <option value="Hypoallergenic">Hypoallergenic</option>
-        </select>
-        <br>
+                <label for="ActivityLevel">Activity Level:</label><br>
+                <select id="activitylevel" required>
+                    <option value = "" disabled selected>Select activity level</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+                <label for="age">Age:</label><br>
+                <input type="text" id="age" name="age" placeholder="Pet's Age">
+                <br>
+                <label for="fixed">Fixed:</label><br>
+                <select id="fixed">
+                    <option value="">Select an option</option>
+                    <option value="UnFixed">Unfixed</option>
+                    <option value="Fixed">Fixed</option>
+                </select>
+                <br>
+
+                <!-- TODO: make this check boxes -->
+                <label for="goodwith">Good With:</label><br>
+                <input type="text" id="goodwith" name="goodwith" placeholder="Kids, Cats, etc">
+                <br>
+                <label for="personality">Personality:</label><br>
+                <input type="text" id="personality" name="personality" placeholder="Pet's Personality">
+                <br>
+                <label for="health">Health:</label><br>
+                <input type="text" id="health" name="health" placeholder="vaccine records, etc">
+                <br>
+                <label for="breed">Breed:</label><br>
+                <input type="text" id="breed" name="breed" placeholder="Pet's Breed">
+                <br>
+                <label for="weight">Weight:</label><br>
+                <input type="text" id="weight" name="weight" placeholder="Pet's Weight">
+                <br>
+
+                <label for="hypoallergenic">Hypoallergenic:</label><br>
+                <select id="hypoallergenic">
+                    <option value="">Select an option</option>
+                    <option value="Not Hypoallergenic">Not Hypoallergenic</option>
+                    <option value="Hypoallergenic">Hypoallergenic</option>
+                </select>
+            </div>
+        </div>
+   
         <label for="file">File Upload:</label><br>
         <input type="file" name="file" id="fileupload" accept="image/*">
 
